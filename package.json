@@ -1,0 +1,33 @@
+{
+  "name": "otheca",
+  "version": "1.0.0",
+  "description": "Minimal mongo/express/js-data/vue/fuse-box boilerplate",
+  "main": "index.js",
+  "scripts": {
+    "run": "node fuse"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "bson": "^1.0.4",
+    "express": "^4.15.3",
+    "js-data": "^3.0.0-rc.9",
+    "js-data-express": "^1.0.0-alpha.1",
+    "js-data-http": "^3.0.0-rc.2",
+    "js-data-mongodb": "^1.0.0-rc.2",
+    "mongodb": "^2.2.30",
+    "ts-json-schema-decorator": "file:.yalc/ts-json-schema-decorator",
+    "vue-property-decorator": "^5.2.1",
+    "vue-router": "^2.7.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "fuse-box": "file:.yalc/fuse-box",
+    "typescript": "^2.4.2",
+    "vue": "^2.4.2",
+    "vue-template-compiler": "^2.4.2",
+    "vue-template-es2015-compiler": "^1.5.3"
+  }
+}

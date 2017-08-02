@@ -1,0 +1,1 @@
+Minimal mongo/express/js-data/vue/fuse-box boilerplate
