@@ -43,7 +43,7 @@ Sparky.task("build", ()=> {
 	//fuse.bundle("server/vendor").instructions(`~ server/*.ts +tslib`);
 
 
-	const app = fuse.bundle("client/app")
+	const app = fuse.bundle("client/app").target('browser')
     .watch("(client|common|config)/**")
 		//.sourceMaps(true)
 		.alias('config', '~/config/client')
@@ -51,7 +51,7 @@ Sparky.task("build", ()=> {
     .instructions('!> [client/index.ts] +[client/routes/*.vue] +[common/**/*.*] - *.d.ts');
 	//if (!production) app.hmr();
 
-	const vendor = fuse.bundle("client/vendor")
+	const vendor = fuse.bundle("client/vendor").target('browser')
 		//.instructions(`~ client/*.ts +tslib`);
 		.instructions(`~ client/index.ts +tslib`);
 	//if (!production) vendor.hmr();

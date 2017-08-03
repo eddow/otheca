@@ -5,14 +5,29 @@ import {
 	MinLength, MaxLength,
 	Items
 } from 'ts-json-schema-decorator'
+import {Record} from 'js-data'
 import {store} from 'common/central'
 
 @Model()
-export class Book {
+class BookFile {
+	@Property() rel: string/*
+	@Property() size: number
+	@Property() mime: string*/
+}
+@Model()
+export class Book extends Record {
 	@Property()
 	title: string
+	@Property()
+	authors: string[]
+	@Property()
+	keywords: string[]
 	@Required()
 	fileName: string
 }
 
-export const bookService = store.defineMapper('book');
+export const bookMapper = store.defineMapper('Book', {
+	schema: Book.schema,
+	recordClass: Book
+});
+
