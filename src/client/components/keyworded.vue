@@ -5,6 +5,9 @@
 		:value="value"
 		@input="input"
 	>
+		<div slot="append" v-if="$slots.append">
+			<slot name="append"></slot>
+		</div>
 		<el-dropdown @command="insert" slot="prepend" :hide-on-click="false">
 			<span class="el-dropdown-link">
 				<i class="fa fa-arrow-right" aria-hidden="true"></i>

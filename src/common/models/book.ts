@@ -10,14 +10,10 @@ import {store} from 'common/central'
 
 @Model()
 export class Book extends Record {
-	@Property()
-	title: string
-	@Property()
-	authors: string[]
-	@Property()
-	keywords: string[]
-	@Required()
-	files: string[]
+	@Property() title: string
+	@Property() authors: string[]
+	@Property() keywords: string[]
+	@Required() files: string[]
 }
 
 export const bookMapper = store.defineMapper('Book', {

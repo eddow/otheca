@@ -25,26 +25,22 @@
 				<keyworded v-model="selected.creating.title" :keywords="kws"></keyworded>
 			</el-form-item>
 			<el-form-item label="Authors">
-				<table>
-					<tr v-for="author in selected.creating.authors" :key="author._id">
-						<th>
-							<el-button @click="delAuthor(author._id)">
-								<i class="fa fa-minus" aria-hidden="true"></i>
-							</el-button>
-						</th>
-						<td>
-							<keyworded v-model="author.name" :keywords="kws"></keyworded>
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<el-button @click="addAuthor">
-								<i class="fa fa-plus" aria-hidden="true"></i>
-							</el-button>
-						</th>
-					</tr>
-				</table>
+				<keyworded
+					v-for="author in selected.creating.authors" :key="author._id"
+					v-model="author.name" :keywords="kws"
+				>
+					<el-button @click="delAuthor(author._id)" slot="append">
+						<i class="fa fa-minus" aria-hidden="true"></i>
+					</el-button>
+				</keyworded>
+				<el-button @click="addAuthor">
+					<i class="fa fa-plus" aria-hidden="true"></i>
+				</el-button>
 			</el-form-item>
+			<el-button @click="register">
+				<i class="fa fa-save" aria-hidden="true"></i>
+				Register
+			</el-button>
 		</el-form>
 	</div>
 </template>
@@ -97,19 +93,37 @@ export default class Register extends Vue {
 	delAuthor(_id) {
 		var authors = this.selected.creating.authors,
 			ndx = authors.findIndex(x=> x._id === _id);
-		if(~ndx) authors.splice(ndx, 1);
+		if(~ndx) {
+			if(!authors[ndx].name.trim())
+				authors.splice(ndx, 1);
+			else
+				this.$confirm('Remove author ?').then(()=> {
+					authors.splice(ndx, 1);
+				}, ()=>0);
+		}
+	}
+	register() {
+		var info = this.selected,
+			itm = new Book({
+				title: info.creating.title,
+				authors: info.creating.authors.map(x=> x.name),
+				files: info.files.map(x=> x.rel)
+			});
+		itm.save();
 	}
 	select(book) {
 		this.selected = book;
-		this.kws = book.files[0].rel
-			.replace(/\%(\w{2})/g, (match, capture)=> String.fromCharCode(Number.parseInt(capture, 16)))
-			.replace(/_/g, ' ').split(/[\/\-\.]/g).map(v=> v.trim());
-		this.kws.pop();	//removes extension
-		if(!this.selected.creating)
-			this.selected.creating = {
-				title: this.kws[this.kws.length-1],
-				authors: []
-			};
+		if(book) {
+			this.kws = book.files[0].rel
+				.replace(/\%(\w{2})/g, (match, capture)=> String.fromCharCode(Number.parseInt(capture, 16)))
+				/*.replace(/_/g, ' ')*/.split(/[\/\-\.\_]/g).map(v=> v.trim());
+			this.kws.pop();	//removes extension
+			if(!this.selected.creating)
+				this.selected.creating = {
+					title: this.kws[this.kws.length-1],
+					authors: []
+				};
+		}
 	}
 }
 </script>
