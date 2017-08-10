@@ -27,8 +27,14 @@ app.get('/lib', (req, res)=> {
 app.get('/lib/*', (req, res)=> {
 	sendFile(res, req.params[0]);
 });
+app.get('/fonts/*', (req, res)=> {
+	debugger;
+	res.sendFile(req.params[0].split('?')[0], {
+		root: join(__dirname, '../node_modules/font-awesome/fonts/')
+	});
+});
 
-require('~/common/models/*');
+import '~/common/models/*';
 mount(app, store, '/api');
 console.log('Listening...');
 app.use(function(req, res) {	//SPA

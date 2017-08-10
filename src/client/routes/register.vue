@@ -24,16 +24,26 @@
 			<el-form-item label="Title">
 				<keyworded v-model="selected.creating.title" :keywords="kws"></keyworded>
 			</el-form-item>
-			<el-form-item label="Authors" :key="key">
-				<p v-for="(author, index) in selected.creating.authors" :key="index">
-					<keyworded v-model="author" :keywords="kws"></keyworded>
-					<button @click="delAuthor(index)">
-						<i class="fa fa-minus" aria-hidden="true"></i>
-					</button>
-				</p>
-				<button @click="addAuthor">
-					<i class="fa fa-plus" aria-hidden="true"></i>
-				</button>
+			<el-form-item label="Authors">
+				<table>
+					<tr v-for="author in selected.creating.authors" :key="author._id">
+						<th>
+							<el-button @click="delAuthor(author._id)">
+								<i class="fa fa-minus" aria-hidden="true"></i>
+							</el-button>
+						</th>
+						<td>
+							<keyworded v-model="author.name" :keywords="kws"></keyworded>
+						</td>
+					</tr>
+					<tr>
+						<th>
+							<el-button @click="addAuthor">
+								<i class="fa fa-plus" aria-hidden="true"></i>
+							</el-button>
+						</th>
+					</tr>
+				</table>
 			</el-form-item>
 		</el-form>
 	</div>
@@ -47,7 +57,7 @@ import axios from 'axios'
 import {store} from 'common/central'
 import keyworded from '../components/keyworded.vue'
 const books = store.getCollection('Book');
-var lib = null;
+var lib = null, aids = 0;
 var loading = Promise.all([
 	axios('/lib').then(response=> {
 		var raw = response.data;
@@ -66,13 +76,12 @@ var loading = Promise.all([
 export default class Register extends Vue {
 	unregistered: any[] = null
 	selected: any = null
-	creating: any = null
 	listener: any
 	kws: string[]
 	compute() {
 		this.unregistered = [];
 		for(let rel in lib)
-			this.unregistered.push(lib[rel]);
+			this.unregistered.push(__assign({creating: null}, lib[rel]));
 	}
   created() {
 		this.listener = books.on('all', this.compute);
@@ -80,11 +89,15 @@ export default class Register extends Vue {
 	}
 	destroyed() { books.off(this.listener); }
 	addAuthor() {
-		this.selected.creating.authors.push('');
+		this.selected.creating.authors.push({
+			_id: 'a'+(++aids),
+			name: ''
+		});
 	}
-	delAuthor(index) {
-		//this.selected.creating.authors.splice(index, 1);
-		debugger;
+	delAuthor(_id) {
+		var authors = this.selected.creating.authors,
+			ndx = authors.findIndex(x=> x._id === _id);
+		if(~ndx) authors.splice(ndx, 1);
 	}
 	select(book) {
 		this.selected = book;
