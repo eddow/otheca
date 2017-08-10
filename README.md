@@ -1,1 +1,7 @@
-Minimal mongo/express/js-data/vue/fuse-box boilerplate
+Minimal boilerplate
+* mongo
+* express
+* js-data
+* vue
+* fuse-box
+* element-ui

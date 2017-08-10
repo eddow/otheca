@@ -1,7 +1,7 @@
-import * as Books from './routes/books.vue'
-import * as Register from './routes/register.vue'
-import 'models/book'
-import 'ts-json-schema-decorator'
+import Books from './routes/books.vue'
+import Register from './routes/register.vue'
+//import 'models/book'
+//import 'ts-json-schema-decorator'
 export default [{
 	path: '/books',
 	component: Books

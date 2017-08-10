@@ -20,16 +20,22 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<form v-if="selected">
-			<label for="title">Title</label>
-			
-			<el-autocomplete
-				class="inline-input"
-				v-model="creating.title"
-				:fetch-suggestions="kwSearch"
-				placeholder="Please Input"
-			></el-autocomplete>
-		</form>
+		<el-form v-if="selected" label-width="120px" style="width: 480px">
+			<el-form-item label="Title">
+				<keyworded v-model="selected.creating.title" :keywords="kws"></keyworded>
+			</el-form-item>
+			<el-form-item label="Authors" :key="key">
+				<p v-for="(author, index) in selected.creating.authors" :key="index">
+					<keyworded v-model="author" :keywords="kws"></keyworded>
+					<button @click="delAuthor(index)">
+						<i class="fa fa-minus" aria-hidden="true"></i>
+					</button>
+				</p>
+				<button @click="addAuthor">
+					<i class="fa fa-plus" aria-hidden="true"></i>
+				</button>
+			</el-form-item>
+		</el-form>
 	</div>
 </template>
 
@@ -37,9 +43,9 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import {Book} from 'models/book'
-import 'models/book'
 import axios from 'axios'
 import {store} from 'common/central'
+import keyworded from '../components/keyworded.vue'
 const books = store.getCollection('Book');
 var lib = null;
 var loading = Promise.all([
@@ -47,15 +53,17 @@ var loading = Promise.all([
 		var raw = response.data;
 		lib = {};
 		for(let rel in raw) {
-			var anl = /^(.*)\.([^\.]{2,4})/.exec(raw[rel].name),
-				name = anl[1], key = name.comparable();
-			(lib[key] || (lib[key] = {files: [], name})).files.push({rel, extension: anl[2], ...raw[rel]});
+			let analysis = /^(.*)\.([^\.]{2,4})/.exec(raw[rel].name),
+				name = analysis[1], key = name.comparable();
+			(lib[key] || (lib[key] = {files: [], name})).files.push({rel, extension: analysis[2], ...raw[rel]});
 		}
 	}),
 	store.findAll('Book')
 ]);
-@Component
-export default class Books extends Vue {
+@Component({
+	components: {keyworded}
+})
+export default class Register extends Vue {
 	unregistered: any[] = null
 	selected: any = null
 	creating: any = null
@@ -71,20 +79,24 @@ export default class Books extends Vue {
 		loading.then(this.compute);
 	}
 	destroyed() { books.off(this.listener); }
+	addAuthor() {
+		this.selected.creating.authors.push('');
+	}
+	delAuthor(index) {
+		//this.selected.creating.authors.splice(index, 1);
+		debugger;
+	}
 	select(book) {
 		this.selected = book;
-		this.kws = book.name
+		this.kws = book.files[0].rel
 			.replace(/\%(\w{2})/g, (match, capture)=> String.fromCharCode(Number.parseInt(capture, 16)))
-			.replace('_', ' ').split(/[\/\-]/g).map(v=> ({value: v.trim()}));
-		this.creating = {
-			title: this.kws[this.kws.length-1].value
-		};
-	}
-	kwSearch(queryString, callback) {
-		callback(this.kws);
-	}
-	insertText(item,a,b,c) {
-		debugger;
+			.replace(/_/g, ' ').split(/[\/\-\.]/g).map(v=> v.trim());
+		this.kws.pop();	//removes extension
+		if(!this.selected.creating)
+			this.selected.creating = {
+				title: this.kws[this.kws.length-1],
+				authors: []
+			};
 	}
 }
 </script>

@@ -9,12 +9,6 @@ import {Record} from 'js-data'
 import {store} from 'common/central'
 
 @Model()
-class BookFile {
-	@Property() rel: string/*
-	@Property() size: number
-	@Property() mime: string*/
-}
-@Model()
 export class Book extends Record {
 	@Property()
 	title: string
@@ -23,7 +17,7 @@ export class Book extends Record {
 	@Property()
 	keywords: string[]
 	@Required()
-	fileName: string
+	files: string[]
 }
 
 export const bookMapper = store.defineMapper('Book', {

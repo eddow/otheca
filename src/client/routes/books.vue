@@ -34,23 +34,13 @@ import 'models/book'
 import {store} from 'common/central'
 const books = store.getCollection('Book');
 store.findAll('Book');
-const emptyBook = {fileName: 'none yet', title: ''};
 @Component
 export default class Books extends Vue {
 	books: Book[] = null
-	creating: any = {...emptyBook}
 	selected: Book = null
 	listener: any
   created() { this.listener = books.on('all', ()=> this.books = books.getAll()); }
 	destroyed() { books.off(this.listener); }
-	add() {
-		try {
-			books.add(this.creating).save();
-			this.creating = {...emptyBook};
-		} catch(x) {
-			//x.errors = [{"expected":"a value","actual":"undefined","path":"fileName"}]
-		}
-	}
 	select(book) {
 		debugger;
 	}

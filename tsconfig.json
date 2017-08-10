@@ -18,7 +18,11 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
 		"typeRoots": ["../node_modules/@types"],
-		"baseUrl": "."
+		"baseUrl": ".",
+		"paths": {
+      "common/*": ["./src/common/*"],
+      "models": ["./src/common/models/*"]
+    }
   },
 	"exclude": [
 		"**/*.spec.ts",

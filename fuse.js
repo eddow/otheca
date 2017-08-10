@@ -40,9 +40,6 @@ Sparky.task("build", ()=> {
 			proc.require();
 		});
 
-	//fuse.bundle("server/vendor").instructions(`~ server/*.ts +tslib`);
-
-
 	const app = fuse.bundle("client/app").target('browser')
     .watch("(client|common|config)/**")
 		//.sourceMaps(true)
@@ -53,7 +50,7 @@ Sparky.task("build", ()=> {
 
 	const vendor = fuse.bundle("client/vendor").target('browser')
 		//.instructions(`~ client/*.ts +tslib`);
-		.instructions(`~ client/index.ts +tslib`);
+		.instructions(`~ client/index.ts ~[client/routes/*.vue] ~[common/**/*.*] +tslib`);
 	//if (!production) vendor.hmr();
 
 	return fuse.run().then((fuseProducer)=> {

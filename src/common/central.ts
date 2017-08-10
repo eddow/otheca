@@ -2,7 +2,7 @@ export function initStore(str) {
 	store = str;
 }
 export var store;
-const punctuation = /[\.\,\-\_\'\"\!\?\>\<\(\)\&]/g;
+const punctuation = /[\t\.\,\-\_\'\"\!\?\>\<\(\)\&]/g;
 __assign(String.prototype, {
 	comparable() {
 		var dups = 0, rv = this.replace(punctuation, ' ').latinise().toLowerCase().split(' ');
