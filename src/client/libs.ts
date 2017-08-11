@@ -11,4 +11,5 @@ import 'font-awesome/css/font-awesome.css'
 
 //import manually as fuse-box doesn't import when referenced only in .vue
 import 'vue-property-decorator'
+import './components/kwdList.vue'
 import './components/keyworded.vue'

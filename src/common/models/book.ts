@@ -6,18 +6,16 @@ import {
 	Items
 } from 'ts-json-schema-decorator'
 import {Record} from 'js-data'
-import {store} from 'common/central'
+import {mapper} from 'common/central'
 
 @Model()
 export class Book extends Record {
 	@Property() title: string
-	@Property() authors: string[]
-	@Property() keywords: string[]
-	@Required() files: string[]
+	@Enum('fr', 'en', 'ro', 'hu') language: string
+	@Items(String) authors: string[]
+	@Items(String) tags: string[]
+	@Items(String) files: string[]
 }
 
-export const bookMapper = store.defineMapper('Book', {
-	schema: Book.schema,
-	recordClass: Book
-});
+export const bookMapper = mapper(Book);
 

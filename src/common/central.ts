@@ -13,3 +13,19 @@ __assign(String.prototype, {
 		return (rv[0]?rv:rv.slice(1)).join(' ');
 	}
 });
+
+export function standardised(schema) {
+	schema.properties._id = {
+		type: 'string',
+		enumerable: false,
+		indexed: true	//used in Collection to create Index
+	};
+	return schema;
+}
+
+export function mapper(cls) {
+	return store.defineMapper(cls.name, {
+		schema: standardised(cls.schema),
+		recordClass: cls
+	});
+}

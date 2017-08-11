@@ -24,18 +24,20 @@
 			<el-form-item label="Title">
 				<keyworded v-model="selected.creating.title" :keywords="kws"></keyworded>
 			</el-form-item>
+			<el-form-item label="Language">
+				<el-select v-model="selected.creating.language">
+					<el-option
+						v-for="(txt, val) in languages" :key="val"
+						:value="val"
+						:label="txt"
+					>
+				</el-select>
+			</el-form-item>
 			<el-form-item label="Authors">
-				<keyworded
-					v-for="author in selected.creating.authors" :key="author._id"
-					v-model="author.name" :keywords="kws"
-				>
-					<el-button @click="delAuthor(author._id)" slot="append">
-						<i class="fa fa-minus" aria-hidden="true"></i>
-					</el-button>
-				</keyworded>
-				<el-button @click="addAuthor">
-					<i class="fa fa-plus" aria-hidden="true"></i>
-				</el-button>
+				<kwd-list :values="selected.creating.authors" :keywords="kws" />
+			</el-form-item>
+			<el-form-item label="Tags">
+				<kwd-list :values="selected.creating.tags" :keywords="kws" />
 			</el-form-item>
 			<el-button @click="register">
 				<i class="fa fa-save" aria-hidden="true"></i>
@@ -52,6 +54,7 @@ import {Book} from 'models/book'
 import axios from 'axios'
 import {store} from 'common/central'
 import keyworded from '../components/keyworded.vue'
+import kwdList from '../components/kwdList.vue'
 const books = store.getCollection('Book');
 var lib = null, aids = 0;
 var loading = Promise.all([
@@ -66,50 +69,57 @@ var loading = Promise.all([
 	}),
 	store.findAll('Book')
 ]);
+const languages = {
+	fr: 'French',
+	en: 'English',
+	ro: 'Romanian',
+	hu: 'Hungarian'
+}
+
+//function hasFile()
+
 @Component({
-	components: {keyworded}
+	components: {keyworded, kwdList}
 })
 export default class Register extends Vue {
 	unregistered: any[] = null
 	selected: any = null
 	listener: any
 	kws: string[]
+	languages: any = languages
+	books: any = books
 	compute() {
-		this.unregistered = [];
-		for(let rel in lib)
-			this.unregistered.push(__assign({creating: null}, lib[rel]));
+		var files = {},
+			unregistered = Object.values(lib).map(x=>({creating: null, ...x}));
+		books.forEach(element => {
+			for(let file of element.files) files[file] = true;
+		});
+		for(let i = 0; i<unregistered.length;) {
+			let libu = unregistered[i];
+			libu.files = libu.files.filter(f=> !files[f.rel]);
+			if(libu.files.length) ++i;
+			else unregistered.splice(i, 1);
+		}
+		this.unregistered = unregistered;
 	}
   created() {
 		this.listener = books.on('all', this.compute);
 		loading.then(this.compute);
 	}
 	destroyed() { books.off(this.listener); }
-	addAuthor() {
-		this.selected.creating.authors.push({
-			_id: 'a'+(++aids),
-			name: ''
-		});
-	}
-	delAuthor(_id) {
-		var authors = this.selected.creating.authors,
-			ndx = authors.findIndex(x=> x._id === _id);
-		if(~ndx) {
-			if(!authors[ndx].name.trim())
-				authors.splice(ndx, 1);
-			else
-				this.$confirm('Remove author ?').then(()=> {
-					authors.splice(ndx, 1);
-				}, ()=>0);
-		}
-	}
 	register() {
 		var info = this.selected,
 			itm = new Book({
-				title: info.creating.title,
-				authors: info.creating.authors.map(x=> x.name),
-				files: info.files.map(x=> x.rel)
+				files: info.files.map(x=> x.rel),
+				...info.creating,
+				authors: info.creating.authors.filter(x=>!!x.trim()),
+				tags: info.creating.tags.filter(x=>!!x.trim())
 			});
-		itm.save();
+		itm.save().then(()=> {
+			this.unregistered.splice(
+				this.unregistered.findIndex(x=> x.name === info.name),
+				1);
+		});
 	}
 	select(book) {
 		this.selected = book;
@@ -121,7 +131,9 @@ export default class Register extends Vue {
 			if(!this.selected.creating)
 				this.selected.creating = {
 					title: this.kws[this.kws.length-1],
-					authors: []
+					language: 'en',
+					authors: [],
+					tags: []
 				};
 		}
 	}

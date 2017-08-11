@@ -28,9 +28,12 @@ app.get('/lib/*', (req, res)=> {
 	sendFile(res, req.params[0]);
 });
 app.get('/fonts/*', (req, res)=> {
-	debugger;
 	res.sendFile(req.params[0].split('?')[0], {
 		root: join(__dirname, '../node_modules/font-awesome/fonts/')
+	}, (err)=> {
+		if(err) res.sendFile(req.params[0].split('?')[0], {
+			root: join(__dirname, '../node_modules/element-ui/lib/theme-default/fonts/')
+		});
 	});
 });
 
