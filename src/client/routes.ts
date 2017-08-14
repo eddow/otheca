@@ -4,8 +4,10 @@ import Register from './routes/register.vue'
 //import 'ts-json-schema-decorator'
 export default [{
 	path: '/books',
+	menu: 'Book list',
 	component: Books
 }, {
 	path: '/register',
+	menu: 'Register',
 	component: Register
 }];

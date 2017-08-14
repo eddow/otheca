@@ -24,6 +24,9 @@
 			<el-form-item label="Title">
 				<keyworded v-model="selected.creating.title" :keywords="kws"></keyworded>
 			</el-form-item>
+			<el-form-item label="Edition">
+				<keyworded v-model="selected.creating.edition" :keywords="kws"></keyworded>
+			</el-form-item>
 			<el-form-item label="Language">
 				<el-select v-model="selected.creating.language">
 					<el-option
@@ -50,7 +53,7 @@
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import {Book} from 'models/book'
+import {Book, Languages} from 'models/book'
 import axios from 'axios'
 import {store} from 'common/central'
 import keyworded from '../components/keyworded.vue'
@@ -69,12 +72,6 @@ var loading = Promise.all([
 	}),
 	store.findAll('Book')
 ]);
-const languages = {
-	fr: 'French',
-	en: 'English',
-	ro: 'Romanian',
-	hu: 'Hungarian'
-}
 
 //function hasFile()
 
@@ -86,7 +83,7 @@ export default class Register extends Vue {
 	selected: any = null
 	listener: any
 	kws: string[]
-	languages: any = languages
+	languages: any = Languages
 	books: any = books
 	compute() {
 		var files = {},
@@ -110,8 +107,11 @@ export default class Register extends Vue {
 	register() {
 		var info = this.selected,
 			itm = new Book({
-				files: info.files.map(x=> x.rel),
 				...info.creating,
+				files: info.files.map(x=> ({
+					rel: x.rel,
+					edition: info.creating.edition
+				})),
 				authors: info.creating.authors.filter(x=>!!x.trim()),
 				tags: info.creating.tags.filter(x=>!!x.trim())
 			});
@@ -131,6 +131,7 @@ export default class Register extends Vue {
 			if(!this.selected.creating)
 				this.selected.creating = {
 					title: this.kws[this.kws.length-1],
+					edition: '',
 					language: 'en',
 					authors: [],
 					tags: []

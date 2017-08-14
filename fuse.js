@@ -9,7 +9,7 @@ Sparky.task("build", ()=> {
 	const fuse = FuseBox.init({
 		homeDir: "src",
 		output: "dist/$name.js",
-		package: 'theca',
+		package: 'otheca',
 		plugins: [
 			TypeScriptHelpers(),
 			EnvPlugin({NODE_ENV: production ? "production" : "development"}),
@@ -42,7 +42,7 @@ Sparky.task("build", ()=> {
 
 	const app = fuse.bundle("client/app").target('browser')
     .watch("(client|common|config)/**")
-		//.sourceMaps(true)
+		.sourceMaps(true)
 		.alias('config', '~/config/client')
 		//.plugin(HotReloadPlugin({port: 4445}))
     .instructions('!> [client/index.ts] +[client/routes/*.vue] +[common/**/*.*] - *.d.ts');

@@ -9,13 +9,25 @@ import {Record} from 'js-data'
 import {mapper} from 'common/central'
 
 @Model()
+export class Edition {
+	@Property() rel: string
+	@Property() edition: string
+}
+
+@Model()
 export class Book extends Record {
 	@Property() title: string
 	@Enum('fr', 'en', 'ro', 'hu') language: string
 	@Items(String) authors: string[]
 	@Items(String) tags: string[]
-	@Items(String) files: string[]
+	@Items(Edition) files: Edition[]
 }
 
-export const bookMapper = mapper(Book);
+mapper(Book);
 
+export const Languages = {
+	fr: 'French',
+	en: 'English',
+	ro: 'Romanian',
+	hu: 'Hungarian'
+};
