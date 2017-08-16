@@ -1,9 +1,7 @@
 <template>
 	<div>
 		<el-menu :router="true" mode="horizontal">
-			<template v-for="(route, ndx) in routes">
-				<el-menu-item v-if="route.menu" :index="route.path" :key="ndx">{{route.menu}}</router-link>
-			</template>
+			<route-menu v-for="(route, ndx) in routes" :route="route" :key="ndx" :index="ndx" />
 		</el-menu>
 		<router-view ></router-view>
 	</div>
@@ -12,9 +10,12 @@
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import routes from '~/client/routes'
+import routes from './routes'
+import routeMenu from './components/routeMenu.vue'
 
-@Component
+@Component({components:{
+	routeMenu
+}})
 export default class App extends Vue {
 	routes: any[] = routes
 }

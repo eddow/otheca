@@ -54,56 +54,18 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
-import axios from 'axios'
-import {store} from 'common/central'
 import keyworded from '../components/keyworded.vue'
 import kwdList from '../components/kwdList.vue'
-const books = store.getCollection('Book');
-var lib = null, aids = 0;
-var loading = Promise.all([
-	axios('/lib').then(response=> {
-		var raw = response.data;
-		lib = {};
-		for(let rel in raw) {
-			let analysis = /^(.*)\.([^\.]{2,4})/.exec(raw[rel].name),
-				name = analysis[1], key = name.comparable();
-			(lib[key] || (lib[key] = {files: [], name})).files.push({rel, extension: analysis[2], ...raw[rel]});
-		}
-	}),
-	store.findAll('Book')
-]);
-
-//function hasFile()
+import unregistered from '../unregistered'
 
 @Component({
 	components: {keyworded, kwdList}
 })
-export default class Register extends Vue {
-	unregistered: any[] = null
+export default class Register1 extends Vue {
+	unregistered: any[] = unregistered
 	selected: any = null
-	listener: any
 	kws: string[]
 	languages: any = Languages
-	books: any = books
-	compute() {
-		var files = {},
-			unregistered = Object.values(lib).map(x=>({creating: null, ...x}));
-		books.forEach(element => {
-			for(let file of element.files) files[file] = true;
-		});
-		for(let i = 0; i<unregistered.length;) {
-			let libu = unregistered[i];
-			libu.files = libu.files.filter(f=> !files[f.rel]);
-			if(libu.files.length) ++i;
-			else unregistered.splice(i, 1);
-		}
-		this.unregistered = unregistered;
-	}
-  created() {
-		this.listener = books.on('all', this.compute);
-		loading.then(this.compute);
-	}
-	destroyed() { books.off(this.listener); }
 	register() {
 		var info = this.selected,
 			itm = new Book({
@@ -115,11 +77,7 @@ export default class Register extends Vue {
 				authors: info.creating.authors.filter(x=>!!x.trim()),
 				tags: info.creating.tags.filter(x=>!!x.trim())
 			});
-		itm.save().then(()=> {
-			this.unregistered.splice(
-				this.unregistered.findIndex(x=> x.name === info.name),
-				1);
-		});
+		itm.save();
 	}
 	select(book) {
 		this.selected = book;
@@ -128,14 +86,6 @@ export default class Register extends Vue {
 				.replace(/\%(\w{2})/g, (match, capture)=> String.fromCharCode(Number.parseInt(capture, 16)))
 				/*.replace(/_/g, ' ')*/.split(/[\/\-\.\_]/g).map(v=> v.trim());
 			this.kws.pop();	//removes extension
-			if(!this.selected.creating)
-				this.selected.creating = {
-					title: this.kws[this.kws.length-1],
-					edition: '',
-					language: 'en',
-					authors: [],
-					tags: []
-				};
 		}
 	}
 }

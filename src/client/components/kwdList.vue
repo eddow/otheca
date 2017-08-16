@@ -44,6 +44,7 @@ export default class kwdList extends Vue {
 			str: ''
 		});
 		this.values.push('');
+		this.$emit('input', this.values);
 	}
 	delItem(_id) {
 		var ided = this.ided,
@@ -56,10 +57,12 @@ export default class kwdList extends Vue {
 					ided.splice(ndx, 1);
 					this.values.splice(ndx, 1);
 				}, ()=>0);
+			this.$emit('input', this.values);
 		}
 	}
 	itemChange(item, index) {
 		this.values[index] = item.str;
+		this.$emit('input', this.values);
 	}
 }
 </script>
