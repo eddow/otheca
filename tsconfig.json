@@ -21,7 +21,7 @@
 		"baseUrl": ".",
 		"paths": {
       "common/*": ["./src/common/*"],
-      "models": ["./src/common/models/*"]
+      "models/*": ["./src/common/models/*"]
     }
   },
 	"exclude": [
