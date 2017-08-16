@@ -1,5 +1,7 @@
 export function initStore(str) {
 	store = str;
+	for(let m in models)
+		mapper(models[m].default);
 }
 export var store;
 const punctuation = /[\t\.\,\-\_\'\"\!\?\>\<\(\)\&]/g;
@@ -14,18 +16,17 @@ __assign(String.prototype, {
 	}
 });
 
-export function standardised(schema) {
-	schema.properties._id = {
+export function mapper(cls) {
+	cls.schema.properties._id = {
 		type: 'string',
 		enumerable: false,
 		indexed: true	//used in Collection to create Index
 	};
-	return schema;
-}
-
-export function mapper(cls) {
 	return store.defineMapper(cls.name, {
-		schema: standardised(cls.schema),
+		schema: cls.schema,
 		recordClass: cls
 	});
 }
+
+
+import * as models from './models/*'

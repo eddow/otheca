@@ -76,7 +76,7 @@
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import {Book, Languages} from 'models/book'
+import Book, {Languages} from 'models/book'
 import 'models/book'
 import {store} from 'common/central'
 const books = store.getCollection('Book');

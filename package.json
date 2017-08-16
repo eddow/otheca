@@ -22,14 +22,14 @@
     "js-data-mongodb": "^1.0.0-rc.2",
     "mongodb": "^2.2.30",
     "string": "^3.3.3",
-    "ts-json-schema-decorator": "^1.2.2",
+    "ts-json-schema-decorator": "file:.yalc/ts-json-schema-decorator",
     "vue-property-decorator": "^5.2.1",
     "vue-router": "^2.7.0",
     "walk": "^2.3.9"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
-    "fuse-box": "file:.yalc/fuse-box",
+    "fuse-box": "^2.2.2-beta.17",
     "typescript": "^2.4.2",
     "vue": "^2.4.2",
     "vue-template-compiler": "^2.4.2",

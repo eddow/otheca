@@ -37,7 +37,6 @@ app.get('/fonts/*', (req, res)=> {
 	});
 });
 
-import '~/common/models/*';
 mount(app, store, '/api');
 console.log('Listening...');
 app.use(function(req, res) {	//SPA

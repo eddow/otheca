@@ -22,7 +22,7 @@ Vue.use(ElementUI, {locale})
 import VueRouter = require('vue-router')
 Vue.use(VueRouter);
 import App from './app.vue'
-import routes from '~/client/routes'
+import routes from './routes'
 
 var router = new VueRouter({
 	mode: window.history && window.history.pushState?'history':'hash',

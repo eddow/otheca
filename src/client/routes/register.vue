@@ -53,7 +53,7 @@
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import {Book, Languages} from 'models/book'
+import Book, {Languages} from 'models/book'
 import axios from 'axios'
 import {store} from 'common/central'
 import keyworded from '../components/keyworded.vue'
