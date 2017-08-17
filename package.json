@@ -30,6 +30,7 @@
   "devDependencies": {
     "babel-core": "^6.25.0",
     "fuse-box": "^2.2.2-beta.17",
+    "stylus": "^0.54.5",
     "typescript": "^2.4.2",
     "vue": "^2.4.2",
     "vue-template-compiler": "^2.4.2",

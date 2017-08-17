@@ -3,16 +3,18 @@
 		<el-table
 			:data="filtered"
 			stripe
+			class="rex"
 			height="250"
 			highlight-current-row
-			@current-change="select"
-			style="width: 100%">
+			style="width: 100%"
+			@selection-change="exclude"
+		>
+			<el-table-column type="selection" width="55" />
 			<el-table-column
 				prop="rel"
 				label="Path">
 			</el-table-column>
-			<el-table-column
-				label="Matches">
+			<el-table-column label="Matches">
 				<template scope="scope">
 					<el-tag v-for="match in scope.row.matches" :key="match">{{match}}</el-tag>
 				</template>
@@ -71,7 +73,16 @@
 		</el-form>
 	</div>
 </template>
-
+<style>
+.el-table.rex .el-checkbox__input.is-checked .el-checkbox__inner {
+	background-color: #ff2820;
+	border-color: #fe2401;
+}
+/*table.rex
+	.el-checkbox__input.is-checked .el-checkbox__inner
+		background-color #ff2820
+		border-color #fe2401*/
+</style>
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
@@ -84,7 +95,8 @@ import unregistered from '../unregistered'
 	components: {keyworded, kwdList}
 })
 export default class RegisterRex extends Vue {
-	filtered: any[]
+	filtered: any[] = []
+	exclusion: any[] = []
 	languages: any = Languages
 	rex: any = {string: ''}
 	patterns: any = {
@@ -126,24 +138,26 @@ export default class RegisterRex extends Vue {
 		}
 	}
 	created() {
+		this.$watch(()=> unregistered, ()=> this.filter(null, this.rex.string, ()=> void 0));
 		this.filtered = unregistered;
 	}
 	register() {
-		/*
-		var info = this.selected,
-			itm = new Book({
-				...info.creating,
-				files: info.files.map(x=> ({
-					rel: x.rel,
-					edition: info.creating.edition
-				})),
-				authors: info.creating.authors.filter(x=>!!x.trim()),
-				tags: info.creating.tags.filter(x=>!!x.trim())
-			});
-		itm.save();*/
+		for(let info of this.filtered)
+			if(!~this.exclusion.indexOf(info)) {
+				var itm = new Book({
+						...info.creating,
+						files: info.files.map(x=> ({
+							rel: x.rel,
+							edition: info.creating.edition
+						})),
+						authors: info.creating.authors.filter(x=>!!x.trim()),
+						tags: info.creating.tags.filter(x=>!!x.trim())
+					});
+				itm.save();
+			}
 	}
-	select(book) {
-
+	exclude(exclusion) {
+		this.exclusion = exclusion;
 	}
 }
 </script>
