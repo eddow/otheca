@@ -42,4 +42,4 @@ console.log('Listening...');
 app.use(function(req, res) {	//SPA
 	res.sendFile('index.html', {root: join(__dirname, '../dist/client')});
 });
-export default app.listen(config.port);
+export default app.listen(config.server.port);

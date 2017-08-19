@@ -66,6 +66,7 @@
 				<template scope="scope">
 					<form method="get" target="_blank" :action="`/lib/${scope.row.rel}`">
 						<el-button native-type="submit" icon="document">Download</el-button>
+						<el-button v-if="access.admin" icon="delete">Delete</el-button>
 					</form>
 				</template>
 			</el-table-column>
@@ -79,10 +80,13 @@ import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
 import 'models/book'
 import {store} from 'common/central'
+import access from '../access'
+
 const books = store.getCollection('Book');
 store.findAll('Book');
 @Component
 export default class Books extends Vue {
+	access = access
 	books: Book[] = null
 	selected: Book = null
 	languages: any = Languages

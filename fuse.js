@@ -2,6 +2,7 @@ const {
 	Sparky, FuseBox, UglifyJSPlugin, TypeScriptHelpers, CSSPlugin, EnvPlugin, VuePlugin,
 	JSONPlugin, BabelPlugin, HotReloadPlugin, QuantumPlugin
 } = require('fuse-box');
+const {ConfigPlugin} = require('bundle-config/fuse-box');
 let producer;
 let production = false;
 
@@ -15,7 +16,8 @@ Sparky.task("build", ()=> {
 			EnvPlugin({NODE_ENV: production ? "production" : "development"}),
 			CSSPlugin(), production && UglifyJSPlugin(),
 			VuePlugin(),
-			JSONPlugin()
+			JSONPlugin(),
+			ConfigPlugin()
 		],
 		hash: production,
 		//hmr: true,
@@ -32,18 +34,16 @@ Sparky.task("build", ()=> {
 	});
 
 	fuse.bundle("server/app")
-		.watch("(server|common|config)/**")
+		.watch("(server|common)/**")
 		//.sourceMaps(true)
-		.alias('config', '~/config/server')
 		.instructions("> [server/index.ts] +[common/**/*.*] -*.d.ts")
 		.completed(proc=> {
 			proc.require();
 		});
 
 	const app = fuse.bundle("client/app").target('browser')
-    .watch("(client|common|config)/**")
+    .watch("(client|common)/**")
 		//.sourceMaps(true)
-		.alias('config', '~/config/client')
 		//.plugin(HotReloadPlugin({port: 4445}))
     .instructions('!> [client/index.ts] +[client/routes/*.vue] +[common/**/*.*] - *.d.ts');
 	//if (!production) app.hmr();
@@ -78,6 +78,7 @@ Sparky.task("make-html", ()=> {
 				app = producer.bundles.get("client/app");
 			// get generated bundle names
 			file.template({
+				title: 'Otheca',
 				//context.output.lastGeneratedFileName returns the .js.map file name
 				vendor: vendor.context.output.lastPrimaryOutput.filename,
 				app: app.context.output.lastPrimaryOutput.filename

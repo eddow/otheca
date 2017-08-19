@@ -1,0 +1,1 @@
+config.set('server:url', config.get('server:name')+':'+config.get('server:port'));

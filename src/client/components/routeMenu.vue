@@ -1,5 +1,5 @@
 <template>
-	<el-submenu v-if="route.children" :index="index">
+	<el-submenu v-if="route.children" :index="''+index">
 		<template slot="title">{{route.menu}}</template>
 		<route-menu
 			v-for="(child, ndx) in route.children"

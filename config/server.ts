@@ -7,4 +7,4 @@ export const mongo = {
 
 export const lib = 'c:/books';
 
-export const extensions = ['pdf', 'docx', 'epub', 'mobi']
+export const extensions = /\.(pdf|docx|epub|mobi)$/;	//['pdf', 'docx', 'epub', 'mobi']

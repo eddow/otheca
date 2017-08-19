@@ -1,7 +1,8 @@
 import * as walk from 'walk'
-import {lib} from 'config'
+import {lib, extensions} from 'config'
 import {join} from 'path'
-var walker  = walk.walk(lib, { followLinks: false })
+const rexExt = new RegExp('\\.('+extensions.join('|')+')$');
+var walker  = walk.walk(lib, {followLinks: false})
 export var libFiles = null;
 var tmp = {};
 walker.on("file", fileHandler);
@@ -10,7 +11,7 @@ walker.on("end", endHandler);
 function fileHandler(root, fileStat, next) {
 	var rel = root.substring(lib.length+1).replace(/\\/g, '/');
 	rel += (rel?'/':'')+fileStat.name;
-	if('file'=== fileStat.type)
+	if('file'=== fileStat.type && rexExt.test(fileStat.name))
 		tmp[rel] = {
 			name: fileStat.name,
 			size: fileStat.size
