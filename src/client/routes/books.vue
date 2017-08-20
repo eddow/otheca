@@ -80,7 +80,7 @@ import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
 import 'models/book'
 import {store} from 'common/central'
-import access from '../access'
+import access from '../business/access'
 
 const books = store.getCollection('Book');
 store.findAll('Book');

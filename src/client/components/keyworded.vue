@@ -8,7 +8,12 @@
 		<template slot="append" v-if="$slots.append">
 			<slot name="append"></slot>
 		</template>
-		<el-dropdown @command="insert" slot="prepend" :hide-on-click="false">
+		<el-dropdown
+			v-if= "keywords && keywords.length"
+			@command="insert"
+			slot="prepend"
+			:hide-on-click="false"
+		>
 			<span class="el-dropdown-link">
 				<i class="fa fa-arrow-right" aria-hidden="true"></i>
 			</span>
@@ -30,7 +35,7 @@ export default class Keyworded extends Vue {
 	@Model('input')
 	@Prop() value: string
 	@Prop() label: string
-	@Prop() keywords: string[]
+	@Prop({default: null}) keywords: string[]
 	@Prop() placeholder: string
 	input(value) { this.$emit('input', value); }
 	insert(kw) {

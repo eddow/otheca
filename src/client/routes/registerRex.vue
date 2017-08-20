@@ -87,13 +87,9 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
-import keyworded from '../components/keyworded.vue'
-import kwdList from '../components/kwdList.vue'
-import unregistered from '../unregistered'
+import unregistered from '../business/unregistered'
 
-@Component({
-	components: {keyworded, kwdList}
-})
+@Component
 export default class RegisterRex extends Vue {
 	filtered: any[] = []
 	exclusion: any[] = []
@@ -127,7 +123,7 @@ export default class RegisterRex extends Vue {
 		for(let x of this.filtered) {
 			function replaceMatches(str) {
 				if(str instanceof Array) return str.map(replaceMatches);
-				for(let i=0; i<x.matches.length; ++i)
+				if(x.matches) for(let i=0; i<x.matches.length; ++i)
 					str = str.replace('$'+(i+1), x.matches[i]||'');
 				return str;
 			}

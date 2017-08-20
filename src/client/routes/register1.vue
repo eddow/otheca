@@ -54,13 +54,9 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
-import keyworded from '../components/keyworded.vue'
-import kwdList from '../components/kwdList.vue'
-import unregistered from '../unregistered'
+import unregistered from '../business/unregistered'
 
-@Component({
-	components: {keyworded, kwdList}
-})
+@Component
 export default class Register1 extends Vue {
 	unregistered: any[] = unregistered
 	selected: any = null

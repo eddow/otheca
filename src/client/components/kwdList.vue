@@ -20,9 +20,9 @@ import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import keyworded from './keyworded.vue'
 var aids = 0;
-@Component({
+@Component/*({
 	components: {keyworded}
-})
+})*/
 export default class kwdList extends Vue {
 	@Prop()
 	keywords: string[]
@@ -48,15 +48,16 @@ export default class kwdList extends Vue {
 	}
 	delItem(_id) {
 		var ided = this.ided,
-			ndx = ided.findIndex(x=> x._id === _id);
-		if(~ndx) {
-			if(!ided[ndx].str.trim())
-				ided.splice(ndx, 1);
-			else
-				this.$confirm(ided[ndx].str, 'Remove value ?').then(()=> {
+			ndx = ided.findIndex(x=> x._id === _id),
+			splice = ()=> {
 					ided.splice(ndx, 1);
 					this.values.splice(ndx, 1);
-				}, ()=>0);
+				};
+		if(~ndx) {
+			if(!ided[ndx].str.trim())
+				splice();
+			else
+				this.$confirm(ided[ndx].str, 'Remove value ?').then(splice, ()=>0);
 			this.$emit('input', this.values);
 		}
 	}

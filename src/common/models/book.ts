@@ -7,6 +7,9 @@ import {
 } from 'ts-json-schema-decorator'
 import {Record} from 'js-data'
 
+/// Classes used in models don't need to be a `Record` as
+/// they are not db-entities, but they still need a
+/// schema, hence they are decorated by `@Model()`
 @Model()
 export class Edition {
 	@Property() rel: string

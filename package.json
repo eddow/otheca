@@ -6,6 +6,10 @@
   "scripts": {
     "run": "node fuse"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eddow/otheca.git"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -13,14 +17,14 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "bson": "^1.0.4",
-    "element-ui": "^1.4.1",
-    "express": "^4.15.3",
+    "element-ui": "^1.4.2",
+    "express": "^4.15.4",
     "font-awesome": "^4.7.0",
-    "js-data": "^3.0.0-rc.9",
-    "js-data-express": "^1.0.0-alpha.1",
-    "js-data-http": "^3.0.0-rc.2",
-    "js-data-mongodb": "^1.0.0-rc.2",
-    "mongodb": "^2.2.30",
+    "js-data": "^3.0.1",
+    "js-data-express": "^1.0.0-rc.1",
+    "js-data-http": "^3.0.0",
+    "js-data-mongodb": "^1.0.2",
+    "mongodb": "^2.2.31",
     "string": "^3.3.3",
     "ts-json-schema-decorator": "^1.2.2",
     "vue-property-decorator": "^5.2.1",
@@ -28,11 +32,11 @@
     "walk": "^2.3.9"
   },
   "devDependencies": {
-    "babel-core": "^6.25.0",
-    "bundle-config": "file:.yalc/bundle-config",
-    "fuse-box": "^2.2.2-beta.17",
+    "babel-core": "^6.26.0",
+    "bundle-config": "^1.1.4",
+    "fuse-box": "^2.2.2",
     "stylus": "^0.54.5",
-    "typescript": "^2.4.2",
+    "typescript": "^2.5.1",
     "vue": "^2.4.2",
     "vue-template-compiler": "^2.4.2",
     "vue-template-es2015-compiler": "^1.5.3"

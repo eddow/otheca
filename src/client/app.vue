@@ -13,7 +13,7 @@ import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Provide} from 'vue-property-decorator'
 import routes from './routes'
 import routeMenu from './components/routeMenu.vue'
-import access from './access'
+import access from './business/access'
 
 @Component({components:{
 	routeMenu
