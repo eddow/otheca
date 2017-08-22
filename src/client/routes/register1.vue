@@ -21,27 +21,35 @@
 			</el-table-column>
 		</el-table>
 		<el-form v-if="selected" label-width="120px" style="width: 480px">
-			<el-form-item label="Title">
-				<keyworded v-model="selected.creating.title" :keywords="kws"></keyworded>
-			</el-form-item>
 			<el-form-item label="Edition">
 				<keyworded v-model="selected.creating.edition" :keywords="kws"></keyworded>
 			</el-form-item>
-			<el-form-item label="Language">
-				<el-select v-model="selected.creating.language">
-					<el-option
-						v-for="(txt, val) in languages" :key="val"
-						:value="val"
-						:label="txt"
-					>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="Authors">
-				<kwd-list :values="selected.creating.authors" :keywords="kws" />
-			</el-form-item>
-			<el-form-item label="Tags">
-				<kwd-list :values="selected.creating.tags" :keywords="kws" />
-			</el-form-item>
+			
+			<el-tabs v-model="targetBook">
+				<el-tab-pane label="Existing" name="existing">
+					<books-list v-model="existing" />
+				</el-tab-pane>
+				<el-tab-pane label="Create new" name="create">
+					<el-form-item label="Title">
+						<keyworded v-model="selected.creating.title" :keywords="kws"></keyworded>
+					</el-form-item>
+					<el-form-item label="Language">
+						<el-select v-model="selected.creating.language">
+							<el-option
+								v-for="(txt, val) in languages" :key="val"
+								:value="val"
+								:label="txt"
+							>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="Authors">
+						<kwd-list :values="selected.creating.authors" :keywords="kws" />
+					</el-form-item>
+					<el-form-item label="Tags">
+						<kwd-list :values="selected.creating.tags" :keywords="kws" />
+					</el-form-item>
+				</el-tab-pane>
+			</el-tabs>
 			<el-button @click="register">
 				<i class="fa fa-save" aria-hidden="true"></i>
 				Register
@@ -62,6 +70,8 @@ export default class Register1 extends Vue {
 	selected: any = null
 	kws: string[]
 	languages: any = Languages
+	targetBook: string = 'existing'
+	existing: book = null
 	register() {
 		var info = this.selected,
 			itm = new Book({

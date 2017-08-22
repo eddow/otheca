@@ -16,6 +16,26 @@ The `Register` screen will deal with the list of files that exist in the library
 - `Register each` will allow to encode pieces one by one
 - `Register group` will allow to use regular expressions to encode a chunk of the library - this can be useful if you have an archive of X00 files with a constant naming convention to extract details about the files.
 
+### Installation
+```
+git clone https://github.com/eddow/otheca.git
+cd otheca
+npm install
+```
+Create a file `otheca/config/local.server.XXXX` (`XXXX` can be `yaml` or `json`) and configure in it a folder (ideally that already contains PDFs) :
+```yml
+lib: c:/myfolder/mybooks
+```
+or
+
+```json
+{"lib": "c:/myfolder/mybooks"}
+```
+After, you can run the server :
+```
+node fuse
+```
+
 ## Boiler plate
 The whole application is written in typescript. One can of course still use some pure javascript if needed, but there is no direct need for it.
 ### Libraries and use
@@ -55,6 +75,8 @@ The bundler will generate 3 files :
 - `server/app.js` that contains all the server code to be executed by `node.js`.
 - `client/vendor.js` that is used by the browser and that contains all the `npm` libraries used by the application
 - `client/app.js` is the source-code from `src/client` and `src/common`
+
+Here, all the files and the templates are "compiled" and bundled in `client/app.js`.
 
 #### [`element-ui`](http://element.eleme.io/#/en-US/component/installation)
 This is a workstation web-application UI that is simply used here without implication on the global structure
@@ -99,6 +121,5 @@ The folder `business` contains all the business-layer of the client : computatio
 ### Evolution and temporaries
 I still have to add some screens for library management (book-merge, uploads, ...) and to find a neat library user-management.
 
-For now, the fact vue single-file-component `fuse-box` are under development means that :
-- The `style` part of single-file-component is not used, style have to be written in `index.html`. We could find a better temporary solution, though I think this is quite really temporary.
+For now, the fact that vue single-file-component in `fuse-box` is under development means that :
 - Imports from single-file-component are not bundled by default - all these imports have to be reported in `client/libs.ts` for now.

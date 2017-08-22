@@ -50,27 +50,6 @@
 				width="180"
 			></el-table-column>
 		</el-table>
-		<el-table
-			v-if="selected"
-			:data="selected.files"
-		>
-			<el-table-column
-				prop="edition"
-				label="Edition"
-			></el-table-column>
-			<el-table-column
-				prop="rel"
-				label="File"
-			></el-table-column>
-			<el-table-column>
-				<template scope="scope">
-					<form method="get" target="_blank" :action="`/lib/${scope.row.rel}`">
-						<el-button native-type="submit" icon="document">Download</el-button>
-						<el-button v-if="access.admin" icon="delete" @click="del(scope.row)">Delete</el-button>
-					</form>
-				</template>
-			</el-table-column>
-		</el-table>
 	</div>
 </template>
 
@@ -85,10 +64,11 @@ import access from '../business/access'
 const books = store.getCollection('Book');
 store.findAll('Book');
 @Component
-export default class Books extends Vue {
+export default class BooksList extends Vue {
 	access = access
 	books: Book[] = null
-	selected: Book = null
+	@Model('input')
+	selected: Book
 	languages: any = Languages
 	listener: any
 	filters: any = {}
@@ -129,10 +109,7 @@ export default class Books extends Vue {
 		}
 	}
 	select(book) {
-		this.selected = book;
-	}
-	del(edition) {
-		
+		this.$emit('input', book);
 	}
 }
 </script>

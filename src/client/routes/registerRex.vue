@@ -74,14 +74,13 @@
 	</div>
 </template>
 <style>
-.el-table.rex .el-checkbox__input.is-checked .el-checkbox__inner {
-	background-color: #ff2820;
-	border-color: #fe2401;
-}
-/*table.rex
-	.el-checkbox__input.is-checked .el-checkbox__inner
-		background-color #ff2820
-		border-color #fe2401*/
+	.el-table.rex .el-checkbox__input.is-checked .el-checkbox__inner {
+		background-color: #ff2820;
+		border-color: #fe2401;
+	}
+	.el-table.rex .el-checkbox__inner:hover, .el-table.rex .el-checkbox__input.is-focus .el-checkbox__inner {
+		border-color: #ff2820;
+	}
 </style>
 <script lang="ts">
 import * as Vue from 'vue'

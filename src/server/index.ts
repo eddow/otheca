@@ -21,5 +21,5 @@ routes.statics(app);
 mount(app, store, '/api');
 routes.controllers(app);
 
-console.log('Listening...');
+console.log(`Listening on port ${config.server.port}`);
 export default app.listen(config.server.port);
