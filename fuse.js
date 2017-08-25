@@ -27,6 +27,7 @@ Sparky.task("build", ()=> {
 		alias: {
 			models: "~/common/models",
 			common: "~/common",
+			//'semantic-vue': "semantic-vue/src",
 			bluebird: 'bluebird/js/release/bluebird.js',
 			vue: 'vue/dist/vue.js'
 		},
@@ -45,11 +46,17 @@ Sparky.task("build", ()=> {
     .watch("(client|common)/**")
 		//.sourceMaps(true)
 		//.plugin(HotReloadPlugin({port: 4445}))
-    .instructions('!> [client/index.ts] +[client/routes/*.vue] +[common/**/*.*] - *.d.ts');
+    .instructions('!> [client/index.ts] +[client/routes/*.vue] +[client/components/*.vue] +[common/**/*.*] - *.d.ts');
 	//if (!production) app.hmr();
 
 	const vendor = fuse.bundle("client/vendor").target('browser')
 		//.instructions(`~ client/*.ts +tslib`);
+		.shim({
+			jquery: {
+				source: "node_modules/jquery/dist/jquery.js",
+				exports: "$",
+			}
+		})
 		.instructions(`~ client/index.ts ~[client/routes/*.vue] ~[common/**/*.*] +tslib`);
 	//if (!production) vendor.hmr();
 

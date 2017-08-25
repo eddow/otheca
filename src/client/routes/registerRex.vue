@@ -66,10 +66,9 @@
 			<el-form-item label="Tags">
 				<kwd-list :values="patterns.tags" @input="compute('tags')" />
 			</el-form-item>
-			<el-button @click="register">
-				<i class="fa fa-save" aria-hidden="true"></i>
+			<s-button icon="save" @click="register">
 				Register
-			</el-button>
+			</s-button>
 		</el-form>
 	</div>
 </template>

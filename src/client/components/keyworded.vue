@@ -1,5 +1,6 @@
 <template>
-	<el-input
+
+	<s-input
 		ref="input"
 		:placeholder="placeholder"
 		:value="value"
@@ -8,22 +9,20 @@
 		<template slot="append" v-if="$slots.append">
 			<slot name="append"></slot>
 		</template>
-		<el-dropdown
+		<s-select
+			action="command"
+			:text="false"
+			class="label"
+			slot="prepend"
 			v-if= "keywords && keywords.length"
 			@command="insert"
-			slot="prepend"
-			:hide-on-click="false"
+			on="hover"
 		>
-			<span class="el-dropdown-link">
-				<i class="fa fa-arrow-right" aria-hidden="true"></i>
-			</span>
-			<el-dropdown-menu slot="dropdown">
-				<el-dropdown-item v-for="(keyword, index) in keywords" :key="index" :command="keyword">
-					{{keyword}}
-				</el-dropdown-item>
-			</el-dropdown-menu>
-		</el-dropdown>
-	</el-input>
+			<s-option v-for="(keyword, index) in keywords" :key="index" :value="keyword">
+				{{keyword}}
+			</s-option>
+		</s-select>
+	</s-input>
 </template>
 
 <script lang="ts">

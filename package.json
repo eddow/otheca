@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/eddow/otheca.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "fmdm",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
     "bluebird": "^3.5.0",
@@ -27,7 +27,8 @@
     "mongodb": "^2.2.31",
     "string": "^3.3.3",
     "ts-json-schema-decorator": "^1.2.2",
-    "vue-property-decorator": "^5.2.1",
+    "v-semantic": "file:.yalc/v-semantic",
+    "vue-property-decorator": "file:.yalc/vue-property-decorator",
     "vue-router": "^2.7.0",
     "walk": "^2.3.9"
   },

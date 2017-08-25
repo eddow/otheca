@@ -5,7 +5,7 @@ import * as express from 'express';
 export function statics(app) {
 	app.use(express.static('dist/client'));
 	app.use(express.static('assets'));
-
+	
 	app.get('/fonts/*', (req, res)=> {
 		res.sendFile(req.params[0].split('?')[0], {
 			root: join(__dirname, '../node_modules/font-awesome/fonts/')
@@ -13,6 +13,12 @@ export function statics(app) {
 			if(err) res.sendFile(req.params[0].split('?')[0], {
 				root: join(__dirname, '../node_modules/element-ui/lib/theme-default/fonts/')
 			});
+		});
+	});
+
+	app.get('/themes/*', (req, res)=> {
+		res.sendFile(req.params[0].split('?')[0], {
+			root: join(__dirname, '../node_modules/semantic-ui/dist/themes/')
 		});
 	});
 }

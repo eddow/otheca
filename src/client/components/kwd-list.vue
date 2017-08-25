@@ -5,13 +5,9 @@
 			v-model="item.str" :keywords="keywords"
 			@input="itemChange(item, index)"
 		>
-			<el-button @click="delItem(item._id)" slot="append">
-				<i class="fa fa-minus" aria-hidden="true"></i>
-			</el-button>
+			<s-button @click="delItem(item._id)" slot="append" icon="minus" />
 		</keyworded>
-		<el-button @click="addItem">
-			<i class="fa fa-plus" aria-hidden="true"></i>
-		</el-button>
+		<s-button icon="plus" @click="addItem" style="display: block;" />
 	</div>
 </template>
 

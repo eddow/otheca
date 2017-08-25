@@ -20,7 +20,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-form v-if="selected" label-width="120px" style="width: 480px">
+		<el-form v-if="selected" label-width="120px" style="width: 100%">
 			<el-form-item label="Edition">
 				<keyworded v-model="selected.creating.edition" :keywords="kws"></keyworded>
 			</el-form-item>

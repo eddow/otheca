@@ -21,6 +21,8 @@ import locale from 'element-ui/lib/locale/lang/en'
 Vue.use(ElementUI, {locale})
 import VueRouter = require('vue-router')
 Vue.use(VueRouter);
+import semanticVue from 'v-semantic'
+Vue.use(semanticVue);
 
 import * as components from './components/*.vue'
 for(let c in components) {

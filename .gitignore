@@ -6,3 +6,4 @@ config/local.*
 .vscode
 package-lock.*
 *.lock
+semantic/*
