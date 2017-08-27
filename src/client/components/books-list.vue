@@ -1,61 +1,48 @@
 <template>
-	<div>
-		<el-form class="filters" label-width="120px" style="width: 480px">
-			<el-form-item label="Language">
-				<el-select v-model="filters.language" @input="filter">
-					<el-option
+	<s-table
+		celled
+		:rows="books"
+		striped
+		body-height="200"
+		selectable
+		@current-change="select"
+		style="width: 100%"
+	>
+		<s-column property="title">
+			<search-header slot="header" label="Title" v-model="filters.title" @input="filter" />
+		</s-column>
+		<s-column
+			property="keywords"
+			width="180"
+		>
+			<search-header slot="header" label="Keywords" v-model="filters.keywords" @input="filter" />
+		</s-column>
+		<s-column
+			width="180"
+		>
+			<label slot="header">
+				Language
+				<s-select multiple fluid transparent v-model="filters.language" @change="filter" placeholder="All languages">
+					<s-option
 						v-for="(txt, val) in languages" :key="val"
 						:value="val"
-						:label="txt"
+						:text="txt"
 					>
-				</el-select>
-			</el-form-item>
-		</el-form>
-		<s-table
-			celled
-			:rows="books"
-			stripe
-			body-height="200"
-			selectable
-			@current-change="select"
-			style="width: 100%"
+					<!--s-icon slot="prepend" icon="search" /-->
+				</s-select>
+			</label>
+			<template scope="scope">
+				{{languages[scope.row.language]}}
+			</template>
+		</s-column>
+		<s-column
+			property="authors"
+			width="180"
+			:render="x=> x.join(', ')"
 		>
-			<s-column property="title">
-				<search-header slot="header" label="Title" v-model="filters.title" @input="filter" />
-			</s-column>
-			<s-column
-				property="keywords"
-				width="180"
-			>
-				<search-header slot="header" label="Keywords" v-model="filters.keywords" @input="filter" />
-			</s-column>
-			<s-column
-				width="180"
-			>
-				<label slot="header">
-					Language
-					<s-select multiple fluid transparent v-model="filters.language" @change="filter" placeholder="All languages">
-						<s-option
-							v-for="(txt, val) in languages" :key="val"
-							:value="val"
-							:text="txt"
-						>
-						<!--s-icon slot="prepend" icon="search" /-->
-					</s-select>
-				</label>
-				<template slot="cell" scope="scope">
-					{{languages[scope.row.language]}}
-				</template>
-			</s-column>
-			<s-column
-				property="authors"
-				width="180"
-				:render="x=> x.join(', ')"
-			>
-				<search-header slot="header" label="Authors" v-model="filters.authors" @input="filter" />
-			</s-column>
-		</s-table>
-	</div>
+			<search-header slot="header" label="Authors" v-model="filters.authors" @input="filter" />
+		</s-column>
+	</s-table>
 </template>
 
 <script lang="ts">

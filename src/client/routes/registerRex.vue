@@ -1,45 +1,44 @@
 <template>
 	<div>
-		<el-table
-			:data="filtered"
-			stripe
+		<s-table
+			:rows="filtered"
+			striped
 			class="rex"
-			height="250"
+			body-height="250"
 			highlight-current-row
 			style="width: 100%"
-			@selection-change="exclude"
 		>
-			<el-table-column type="selection" width="55" />
-			<el-table-column
-				prop="rel"
-				label="Path">
-			</el-table-column>
-			<el-table-column label="Matches">
+			<s-checkbox-column width="55" v-model="selection" />
+			<s-column
+				property="rel"
+				header="Path">
+			</s-column>
+			<s-column header="Matches">
 				<template scope="scope">
 					<el-tag v-for="match in scope.row.matches" :key="match">{{match}}</el-tag>
 				</template>
-			</el-table-column>
-			<el-table-column
-				prop="creating.title"
-				label="Title"
-			></el-table-column>
-			<el-table-column
-				prop="creating.edition"
-				label="Edition"
-			></el-table-column>
-			<el-table-column
-				prop="creating.authors"
-				label="Authors"
+			</s-column>
+			<s-column
+				property="creating.title"
+				header="Title"
+			></s-column>
+			<s-column
+				property="creating.edition"
+				header="Edition"
+			></s-column>
+			<s-column
+				property="creating.authors"
+				header="Authors"
 				width="180"
-			></el-table-column>
-			<el-table-column
-				prop="creating.tags"
-				label="Tags"
+			></s-column>
+			<s-column
+				property="creating.tags"
+				header="Tags"
 				width="180"
-			></el-table-column>
-		</el-table>
+			></s-column>
+		</s-table>
 		<el-form label-width="120px" :model="rex">
-			<el-form-item label="RegExp" prop="string"
+			<el-form-item label="RegExp" property="string"
 				:rules="[{validator: filter, trigger: 'change'}]">
 				<el-input v-model="rex.string" />
 			</el-form-item>
@@ -73,13 +72,6 @@
 	</div>
 </template>
 <style>
-	.el-table.rex .el-checkbox__input.is-checked .el-checkbox__inner {
-		background-color: #ff2820;
-		border-color: #fe2401;
-	}
-	.el-table.rex .el-checkbox__inner:hover, .el-table.rex .el-checkbox__input.is-focus .el-checkbox__inner {
-		border-color: #ff2820;
-	}
 </style>
 <script lang="ts">
 import * as Vue from 'vue'
@@ -93,6 +85,7 @@ export default class RegisterRex extends Vue {
 	exclusion: any[] = []
 	languages: any = Languages
 	rex: any = {string: ''}
+	selection = true
 	patterns: any = {
 		title: '',
 		language: 'en',
@@ -136,22 +129,18 @@ export default class RegisterRex extends Vue {
 		this.filtered = unregistered;
 	}
 	register() {
-		for(let info of this.filtered)
-			if(!~this.exclusion.indexOf(info)) {
-				var itm = new Book({
-						...info.creating,
-						files: info.files.map(x=> ({
-							rel: x.rel,
-							edition: info.creating.edition
-						})),
-						authors: info.creating.authors.filter(x=>!!x.trim()),
-						tags: info.creating.tags.filter(x=>!!x.trim())
-					});
-				itm.save();
-			}
-	}
-	exclude(exclusion) {
-		this.exclusion = exclusion;
+		for(let info of this.selection) {
+			var itm = new Book({
+					...info.creating,
+					files: info.files.map(x=> ({
+						rel: x.rel,
+						edition: info.creating.edition
+					})),
+					authors: info.creating.authors.filter(x=>!!x.trim()),
+					tags: info.creating.tags.filter(x=>!!x.trim())
+				});
+			itm.save();
+		}
 	}
 }
 </script>
