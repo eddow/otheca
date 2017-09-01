@@ -1,15 +1,17 @@
 <template>
-	<el-submenu v-if="route.children" :index="''+index">
-		<template slot="title">{{route.menu}}</template>
-		<route-menu
-			v-for="(child, ndx) in route.children"
-			:route="child"
-			:key="ndx"
-			:index="ndx"
-			:root="path"
-		/>
-	</el-submenu>
-	<el-menu-item v-else :index="path">{{route.menu}}</el-menu-item>
+	<div class="item" v-if="route.children">
+		<div clahh="header">{{route.menu}}</div>
+    <div class="menu">
+			<route-menu
+				v-for="(child, ndx) in route.children"
+				:route="child"
+				:key="ndx"
+				:index="ndx"
+				:root="path"
+			/>
+		</div>
+	</div>
+	<a v-else class="item" :href="path">{{route.menu}}</a>
 </template>
 
 <script lang="ts">

@@ -20,41 +20,39 @@
 				</template>
 			</s-column>
 		</s-table>
-		<el-form v-if="selected" label-width="120px" style="width: 100%">
-			<el-form-item label="Edition">
-				<keyworded v-model="selected.creating.edition" :keywords="kws" />
-			</el-form-item>
+		<s-form :model="selected && selected.creating" label-width="120px" style="width: 100%">
+			<template slot="input" scope="field">
+				<keyworded :keywords="kws" />
+			</template>
+			<s-field label="Edition" property="edition"/>
 			
-			<el-tabs v-model="targetBook">
-				<el-tab-pane label="Existing" name="existing">
+			<s-tabs v-model="targetBook">
+				<s-panel title="Existing" name="existing">
 					<books-list v-model="existing" />
-				</el-tab-pane>
-				<el-tab-pane label="Create new" name="create">
-					<el-form-item label="Title">
-						<keyworded v-model="selected.creating.title" :keywords="kws" />
-					</el-form-item>
-					<el-form-item label="Language">
-						<el-select v-model="selected.creating.language">
-							<el-option
+				</s-panel>
+				<s-panel title="Create new" name="create">
+					<s-field label="Title" property="title" />
+					<s-field label="Language" property="language">
+						<s-select>
+							<s-option
 								v-for="(txt, val) in languages" :key="val"
 								:value="val"
-								:label="txt"
+								:text="txt"
 							>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="Authors">
-						<kwd-list :values="selected.creating.authors" :keywords="kws" />
-					</el-form-item>
-					<el-form-item label="Tags">
-						<kwd-list :values="selected.creating.tags" :keywords="kws" />
-					</el-form-item>
-				</el-tab-pane>
-			</el-tabs>
-			<el-button @click="register">
-				<i class="fa fa-save" aria-hidden="true"></i>
+						</s-select>
+					</s-field>
+					<s-field label="Authors" property="authors">
+						<kwd-list :keywords="kws" />
+					</s-field>
+					<s-field label="Tags" property="tags">
+						<kwd-list :keywords="kws" />
+					</s-field>
+				</s-panel>
+			</s-tabs>
+			<s-button @click="register" icon="save">
 				Register
-			</el-button>
-		</el-form>
+			</s-button>
+		</s-form>
 	</div>
 </template>
 
@@ -92,6 +90,11 @@ export default class Register1 extends Vue {
 				.replace(/\%(\w{2})/g, (match, capture)=> String.fromCharCode(Number.parseInt(capture, 16)))
 				/*.replace(/_/g, ' ')*/.split(/[\/\-\.\_]/g).map(v=> v.trim());
 			this.kws.pop();	//removes extension
+			if(!book.creating) book.creating = {
+				language: 'en'/*,
+				authors: [],
+				tags: []*/
+			};
 		}
 	}
 }

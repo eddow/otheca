@@ -24,7 +24,8 @@ export default class kwdList extends Vue {
 	keywords: string[]
 	@Model('input') values: string[]
 	ided: any[] = []
-	@Watch('values', {deep: true}) setIded(values) {
+	@Watch('values', {deep: true, immediate: true}) setIded(values) {
+		if(!values) this.$emit('input', values = []);
 		var ided = this.ided;
 		ided.length = values.length;
 		for(let i in values) {
@@ -35,7 +36,6 @@ export default class kwdList extends Vue {
 				});
 			else ided[i].str = values[i];
 		}
-		this.$emit('input', this.values);
 	}
 	addItem() {
 		this.values.push('');
@@ -52,7 +52,6 @@ export default class kwdList extends Vue {
 				splice();
 			else
 				this.$confirm(ided[ndx].str, 'Remove value ?').then(splice, ()=>0);
-			this.$emit('input', this.values);
 		}
 	}
 	itemChange(item, index) {

@@ -19,11 +19,11 @@
 			</s-checkbox-column>
 			<s-column
 				property="rel"
-				header="Path">
-			</s-column>
-			<s-column header="Matches">
+				header="Path"
+			/>
+			<s-column header="Matches" property="matches">
 				<template scope="scope">
-					<span class="ui label" v-for="match in scope.row.matches" :key="match">{{match}}</el-tag>
+					<span class="ui label" v-for="item in scope.value" :key="item">{{item}}</el-tag>
 				</template>
 			</s-column>
 			<s-column
@@ -38,12 +38,20 @@
 				property="creating.authors"
 				header="Authors"
 				width="180"
-			></s-column>
+			>
+				<template scope="scope">
+					<span class="ui label" v-for="item in scope.value" :key="item">{{item}}</el-tag>
+				</template>
+			</s-column>
 			<s-column
 				property="creating.tags"
 				header="Tags"
 				width="180"
-			></s-column>
+			>
+				<template scope="scope">
+					<span class="ui label" v-for="item in scope.value" :key="item">{{item}}</el-tag>
+				</template>
+			</s-column>
 		</s-table>
 
 		<s-input fluid v-model="rex.string" :error="!!rex.error">
@@ -70,7 +78,6 @@
 			<s-button icon="save" @click="register">
 				Register
 			</s-button>
-			--{{patterns.authors}}--
 		</s-form>
 	</div>
 </template>
