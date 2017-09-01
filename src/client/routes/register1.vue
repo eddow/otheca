@@ -1,28 +1,28 @@
 <template>
 	<div>
-		<el-table
-			:data="unregistered"
-			stripe
-			height="250"
+		<s-table
+			:rows="unregistered"
+			striped
+			body-height="250"
 			highlight-current-row
-			@current-change="select"
+			v-model="selected"
 			style="width: 100%">
-			<el-table-column
-				prop="name"
-				label="Name">
-			</el-table-column>
-			<el-table-column
-				label="Files"
+			<s-column
+				property="name"
+				header="Name">
+			</s-column>
+			<s-column
+				header="Files"
 				width="180"
 			>
 				<template scope="scope">
 					{{scope.row.files.map(x=>x.extension).join(', ')}}
 				</template>
-			</el-table-column>
-		</el-table>
+			</s-column>
+		</s-table>
 		<el-form v-if="selected" label-width="120px" style="width: 100%">
 			<el-form-item label="Edition">
-				<keyworded v-model="selected.creating.edition" :keywords="kws"></keyworded>
+				<keyworded v-model="selected.creating.edition" :keywords="kws" />
 			</el-form-item>
 			
 			<el-tabs v-model="targetBook">
@@ -31,7 +31,7 @@
 				</el-tab-pane>
 				<el-tab-pane label="Create new" name="create">
 					<el-form-item label="Title">
-						<keyworded v-model="selected.creating.title" :keywords="kws"></keyworded>
+						<keyworded v-model="selected.creating.title" :keywords="kws" />
 					</el-form-item>
 					<el-form-item label="Language">
 						<el-select v-model="selected.creating.language">
@@ -71,7 +71,7 @@ export default class Register1 extends Vue {
 	kws: string[]
 	languages: any = Languages
 	targetBook: string = 'existing'
-	existing: book = null
+	existing: Book = null
 	register() {
 		var info = this.selected,
 			itm = new Book({
@@ -85,8 +85,8 @@ export default class Register1 extends Vue {
 			});
 		itm.save();
 	}
+	@Watch('selected')
 	select(book) {
-		this.selected = book;
 		if(book) {
 			this.kws = book.files[0].rel
 				.replace(/\%(\w{2})/g, (match, capture)=> String.fromCharCode(Number.parseInt(capture, 16)))

@@ -19,7 +19,7 @@ import * as ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import locale from 'element-ui/lib/locale/lang/en'
 Vue.use(ElementUI, {locale})
-import VueRouter = require('vue-router')
+import * as VueRouter from 'vue-router'
 Vue.use(VueRouter);
 import semanticVue from 'v-semantic'
 Vue.use(semanticVue);

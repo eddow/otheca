@@ -6,12 +6,7 @@ import 'element-ui/lib/theme-default/index.css'
 import 'semantic-ui/dist/semantic.min.css'
 import 'font-awesome/css/font-awesome.css'
 
-//import manually as fuse-box doesn't import when referenced only in .vue
-import 'vue-property-decorator'/*
-import './components/kwd-list.vue'
-import './components/keyworded.vue'
-import './components/route-menu.vue'
-import './components/books-list.vue'
-import './components/books-list.vue'*/
+// https://github.com/fuse-box/fuse-box/issues/542
+//import 'vue-property-decorator' //This is not needed, I don't know why
 import './business/unregistered'
 import './business/access'

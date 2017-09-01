@@ -15,32 +15,30 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import keyworded from './keyworded.vue'
+import {Field} from 'v-semantic'
 var aids = 0;
-@Component/*({
-	components: {keyworded}
-})*/
+
+@Component({mixins: [Field.Input]})
 export default class kwdList extends Vue {
 	@Prop()
 	keywords: string[]
-	@Prop()
-	@Model('input')
-	values: string[]
+	@Model('input') values: string[]
 	ided: any[] = []
-	@Watch('values')
-	setIded(values) {
+	@Watch('values', {deep: true}) setIded(values) {
 		var ided = this.ided;
 		ided.length = values.length;
-		for(let i in values)
-			(ided[i] || (ided[i] = {_id: 'a'+(++aids)}))
-				.str = values[i];
+		for(let i in values) {
+			if(!ided[i])
+				this.$set(ided, i, {
+					_id: 'a'+(++aids),
+					str: values[i]
+				});
+			else ided[i].str = values[i];
+		}
+		this.$emit('input', this.values);
 	}
 	addItem() {
-		this.ided.push({
-			_id: 'a'+(++aids),
-			str: ''
-		});
 		this.values.push('');
-		this.$emit('input', this.values);
 	}
 	delItem(_id) {
 		var ided = this.ided,
@@ -58,8 +56,7 @@ export default class kwdList extends Vue {
 		}
 	}
 	itemChange(item, index) {
-		this.values[index] = item.str;
-		this.$emit('input', this.values);
+		this.$set(this.values, index, item.str);
 	}
 }
 </script>

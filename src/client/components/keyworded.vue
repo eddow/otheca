@@ -1,13 +1,16 @@
 <template>
-
 	<s-input
 		ref="input"
 		:placeholder="placeholder"
 		:value="value"
+		:name="internalName"
 		@input="input"
 	>
-		<template slot="append" v-if="$slots.append">
+		<template slot="append">
 			<slot name="append"></slot>
+		</template>
+		<template slot="input" v-if="$slots.input">
+			<slot name="input" />
 		</template>
 		<s-select
 			action="command"
@@ -28,11 +31,11 @@
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
+import {Field} from 'v-semantic'
 
-@Component
+@Component({mixins: [Field.Input]})
 export default class Keyworded extends Vue {
-	@Model('input')
-	@Prop() value: string
+	@Model('input') value: string
 	@Prop() label: string
 	@Prop({default: null}) keywords: string[]
 	@Prop() placeholder: string

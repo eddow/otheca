@@ -9,20 +9,20 @@
 		style="width: 100%"
 	>
 		<s-column property="title">
-			<search-header slot="header" label="Title" v-model="filters.title" @input="filter" />
+			<search-header slot="header" label="Title" v-model="filters.title" />
 		</s-column>
 		<s-column
 			property="keywords"
 			width="180"
 		>
-			<search-header slot="header" label="Keywords" v-model="filters.keywords" @input="filter" />
+			<search-header slot="header" label="Keywords" v-model="filters.keywords" />
 		</s-column>
 		<s-column
 			width="180"
 		>
 			<label slot="header">
 				Language
-				<s-select multiple fluid transparent v-model="filters.language" @change="filter" placeholder="All languages">
+				<s-select multiple fluid transparent v-model="filters.language" placeholder="All languages">
 					<s-option
 						v-for="(txt, val) in languages" :key="val"
 						:value="val"
@@ -40,7 +40,7 @@
 			width="180"
 			:render="x=> x.join(', ')"
 		>
-			<search-header slot="header" label="Authors" v-model="filters.authors" @input="filter" />
+			<search-header slot="header" label="Authors" v-model="filters.authors" />
 		</s-column>
 	</s-table>
 </template>
@@ -71,9 +71,9 @@ export default class BooksList extends Vue {
 	}
   created() {
 		this.listener = books.on('all', this.filter);
-		this.filter();
 	}
 	destroyed() { books.off(this.listener); }
+	@Watch('filters', {deep: true, immediate: true})
 	filter() {
 		function test(filters, value, all) {
 			if(!filters || !filters.length) return true;

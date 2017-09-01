@@ -7,15 +7,23 @@
 			body-height="250"
 			highlight-current-row
 			style="width: 100%"
+			:row-class="row=> !row.selected && 'unselected'"
 		>
-			<s-checkbox-column width="55" v-model="selection" />
+			<s-checkbox-column width="55" v-model="selection">
+				<template scope="scope">
+					<s-icon
+						:icon="scope.checked?'checkmark':'remove'"
+						:class="scope.checked?'grey':'red'"
+						@click="scope.toggle(scope.row)" />
+				</template>
+			</s-checkbox-column>
 			<s-column
 				property="rel"
 				header="Path">
 			</s-column>
 			<s-column header="Matches">
 				<template scope="scope">
-					<el-tag v-for="match in scope.row.matches" :key="match">{{match}}</el-tag>
+					<span class="ui label" v-for="match in scope.row.matches" :key="match">{{match}}</el-tag>
 				</template>
 			</s-column>
 			<s-column
@@ -37,41 +45,39 @@
 				width="180"
 			></s-column>
 		</s-table>
-		<el-form label-width="120px" :model="rex">
-			<el-form-item label="RegExp" property="string"
-				:rules="[{validator: filter, trigger: 'change'}]">
-				<el-input v-model="rex.string" />
-			</el-form-item>
-		</el-form>
-		<el-form label-width="120px" style="width: 480px">
-			<el-form-item label="Title">
-				<keyworded v-model="patterns.title" @input="compute('title')" />
-			</el-form-item>
-			<el-form-item label="Edition">
-				<keyworded v-model="patterns.edition" @input="compute('edition')" />
-			</el-form-item>
-			<el-form-item label="Language">
-				<el-select v-model="patterns.language">
-					<el-option
+
+		<s-input fluid v-model="rex.string" :error="!!rex.error">
+			<s-icon icon="search" slot="prepend" />
+		</s-input>
+		<s-form inline :model="patterns" label-width="120px" style="width: 480px">
+			<s-field label="Title" name="title" @change="compute('title')" />
+			<s-field label="Edition" name="edition" @change="compute('edition')" />
+			<s-field label="Language" name="language">
+				<s-select>
+					<s-option
 						v-for="(txt, val) in languages" :key="val"
 						:value="val"
-						:label="txt"
-					>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="Authors">
-				<kwd-list :values="patterns.authors" @input="compute('authors')" />
-			</el-form-item>
-			<el-form-item label="Tags">
+						:text="txt"
+					/>
+				</s-select>
+			</s-field>
+			<s-field label="Authors" name="authors">
+				<kwd-list @input="compute('authors')" />
+			</s-field>
+			<!--el-form-item label="Tags">
 				<kwd-list :values="patterns.tags" @input="compute('tags')" />
-			</el-form-item>
+			</el-form-item-->
 			<s-button icon="save" @click="register">
 				Register
 			</s-button>
-		</el-form>
+			--{{patterns.authors}}--
+		</s-form>
 	</div>
 </template>
 <style>
+tr.unselected td {
+	color: #aaa;
+}
 </style>
 <script lang="ts">
 import * as Vue from 'vue'
@@ -84,8 +90,11 @@ export default class RegisterRex extends Vue {
 	filtered: any[] = []
 	exclusion: any[] = []
 	languages: any = Languages
-	rex: any = {string: ''}
-	selection = true
+	rex: any = {
+		string: '',
+		error: ''
+	}
+	selection: boolean | any[] = true
 	patterns: any = {
 		title: '',
 		language: 'en',
@@ -93,17 +102,20 @@ export default class RegisterRex extends Vue {
 		authors: [],
 		tags: []
 	}
-	filter(rule, value, callback) {
+	@Watch('rex.string')
+	filter(value) {
 		var rex;
 		if(!value) {
 			this.filtered = unregistered;
-			return callback();
+			return;
 		}
-		try { rex = new RegExp(value); }
-		catch(x) {
-			return callback(new Error(x.message));
+		try {
+			rex = new RegExp(value);
+			this.rex.error = false;
+		} catch(x) {
+			this.rex.error = x.message;
+			return;
 		}
-		callback();
 		this.filtered = unregistered.filter(x=> {
 			var match = rex.exec(x.rel);
 			return x.matches = match && match.slice(1);
