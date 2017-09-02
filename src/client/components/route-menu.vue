@@ -1,7 +1,7 @@
 <template>
 	<div class="item" v-if="route.children">
-		<div clahh="header">{{route.menu}}</div>
-    <div class="menu">
+		<div class="header">{{route.menu}}</div>
+    <div class="ui  menu">
 			<route-menu
 				v-for="(child, ndx) in route.children"
 				:route="child"
@@ -11,7 +11,10 @@
 			/>
 		</div>
 	</div>
-	<a v-else class="item" :href="path">{{route.menu}}</a>
+	<!--a v-else class="item" :href="path">{{route.menu}}</a-->
+	<router-link v-else class="item" :to="path">
+		{{route.menu}}
+	</router-link>
 </template>
 
 <script lang="ts">

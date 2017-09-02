@@ -58,10 +58,15 @@
 			<s-icon icon="search" slot="prepend" />
 		</s-input>
 		<s-form inline :model="patterns" label-width="120px" style="width: 480px">
-			<s-field label="Title" name="title" @change="compute('title')" />
-			<s-field label="Edition" name="edition" @change="compute('edition')" />
-			<s-field label="Language" name="language">
-				<s-select>
+			<s-data-mold select="list">
+				<template slot="input" scope="field">
+					<kwd-list :name="field.name" v-model="field.value" />
+				</template>
+			</s-data-mold>
+			<s-field label="Title" property="title" @change="compute('title')" />
+			<s-field label="Edition" property="edition" @change="compute('edition')" />
+			<s-field label="Language" property="language">
+					<s-select name="language" v-model="patterns.language">
 					<s-option
 						v-for="(txt, val) in languages" :key="val"
 						:value="val"
@@ -69,12 +74,8 @@
 					/>
 				</s-select>
 			</s-field>
-			<s-field label="Authors" name="authors">
-				<kwd-list @input="compute('authors')" />
-			</s-field>
-			<!--el-form-item label="Tags">
-				<kwd-list :values="patterns.tags" @input="compute('tags')" />
-			</el-form-item-->
+			<s-field label="Authors" property="authors" type="list" />
+			<s-field label="Tags" property="tags" type="list" />
 			<s-button icon="save" @click="register">
 				Register
 			</s-button>

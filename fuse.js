@@ -54,7 +54,11 @@ Sparky.task("build", ()=> {
 		.shim({
 			jquery: {
 				source: "node_modules/jquery/dist/jquery.js",
-				exports: "$",
+				exports: "$"
+			},
+			alertify: {
+				source: "node_modules/alertify.js/dist/js/alertify.js",
+				exports: "alertify"
 			}
 		})
 		.instructions(`~ client/index.ts ~[client/routes/*.vue] ~[common/**/*.*] +tslib`);

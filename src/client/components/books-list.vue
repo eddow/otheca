@@ -5,7 +5,8 @@
 		striped
 		body-height="200"
 		selectable
-		@current-change="select"
+		:current="selected"
+		@row-click="select"
 		style="width: 100%"
 	>
 		<s-column property="title">
@@ -59,7 +60,7 @@ store.findAll('Book');
 export default class BooksList extends Vue {
 	access = access
 	books: Book[] = null
-	@Model('input') @Prop()
+	@Model('input')
 	selected: Book
 	languages: any = Languages
 	listener: any

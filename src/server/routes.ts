@@ -6,7 +6,7 @@ export function statics(app) {
 	app.use(express.static('dist/client'));
 	app.use(express.static('assets'));
 	
-	app.get('/fonts/*', (req, res)=> {
+	/*app.get('/fonts/*', (req, res)=> {
 		res.sendFile(req.params[0].split('?')[0], {
 			root: join(__dirname, '../node_modules/font-awesome/fonts/')
 		}, (err)=> {
@@ -14,7 +14,7 @@ export function statics(app) {
 				root: join(__dirname, '../node_modules/element-ui/lib/theme-default/fonts/')
 			});
 		});
-	});
+	});*/
 
 	app.get('/themes/*', (req, res)=> {
 		res.sendFile(req.params[0].split('?')[0], {

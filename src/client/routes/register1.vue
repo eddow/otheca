@@ -16,42 +16,59 @@
 				width="180"
 			>
 				<template scope="scope">
-					{{scope.row.files.map(x=>x.extension).join(', ')}}
+					<template v-for="(file, index) in scope.row.files">
+						<template v-if="0<index">, </template>
+						<a :key="index" target="_blank" :href="'/lib/'+file.rel">{{file.extension}}</a>
+					</template>
 				</template>
 			</s-column>
 		</s-table>
 		<s-form :model="selected && selected.creating" label-width="120px" style="width: 100%">
-			<template slot="input" scope="field">
-				<keyworded :keywords="kws" />
-			</template>
+			<s-data-mold>
+				<template slot="input" scope="field">
+					<keyworded :keywords="kws" :name="field.name" v-model="field.value" />
+				</template>
+			</s-data-mold>
+			<s-data-mold select="list">
+				<template slot="input" scope="field">
+					<kwd-list :keywords="kws" :name="field.name" v-model="field.value" />
+				</template>
+			</s-data-mold>
+			<s-data-mold select="languages">
+				<template slot="input" scope="field">
+					<s-select :name="field.name" v-model="field.value">
+						<s-option
+							v-for="(txt, val) in languages" :key="val"
+							:value="val"
+							:text="txt"
+						>
+					</s-select>
+				</template>
+			</s-data-mold>
+			
 			<s-field label="Edition" property="edition"/>
 			
 			<s-tabs v-model="targetBook">
 				<s-panel title="Existing" name="existing">
 					<books-list v-model="existing" />
+					<s-button
+						@click="addEdition"
+						icon="plus"
+						:disabled="!existing"
+					>
+						Add
+					</s-button>
 				</s-panel>
 				<s-panel title="Create new" name="create">
 					<s-field label="Title" property="title" />
-					<s-field label="Language" property="language">
-						<s-select>
-							<s-option
-								v-for="(txt, val) in languages" :key="val"
-								:value="val"
-								:text="txt"
-							>
-						</s-select>
-					</s-field>
-					<s-field label="Authors" property="authors">
-						<kwd-list :keywords="kws" />
-					</s-field>
-					<s-field label="Tags" property="tags">
-						<kwd-list :keywords="kws" />
-					</s-field>
+					<s-field label="Language" property="language" type="languages" />
+					<s-field label="Authors" property="authors" type="list" />
+					<s-field label="Tags" property="tags" type="list" />
+					<s-button @click="register" icon="save">
+						Register
+					</s-button>
 				</s-panel>
 			</s-tabs>
-			<s-button @click="register" icon="save">
-				Register
-			</s-button>
 		</s-form>
 	</div>
 </template>
@@ -70,14 +87,22 @@ export default class Register1 extends Vue {
 	languages: any = Languages
 	targetBook: string = 'existing'
 	existing: Book = null
+	get files() {
+		var info = this.selected;
+		return info.files.map(x=> ({
+			rel: x.rel,
+			edition: info.creating.edition
+		}));
+	}
+	addEdition() {
+		this.existing.files.push(...this.files);
+		this.existing.save();
+	}
 	register() {
 		var info = this.selected,
 			itm = new Book({
 				...info.creating,
-				files: info.files.map(x=> ({
-					rel: x.rel,
-					edition: info.creating.edition
-				})),
+				files: this.files,
 				authors: info.creating.authors.filter(x=>!!x.trim()),
 				tags: info.creating.tags.filter(x=>!!x.trim())
 			});
@@ -91,9 +116,7 @@ export default class Register1 extends Vue {
 				/*.replace(/_/g, ' ')*/.split(/[\/\-\.\_]/g).map(v=> v.trim());
 			this.kws.pop();	//removes extension
 			if(!book.creating) book.creating = {
-				language: 'en'/*,
-				authors: [],
-				tags: []*/
+				language: 'en'
 			};
 		}
 	}

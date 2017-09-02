@@ -1,31 +1,21 @@
 <template>
-	<div class="screen ui grid">
-		<div class="ui inverted vertical menu two wide column">
-			<div class="item">
-				<label for="ss">Admin</label>
-				<s-checkbox name="ss" toggle v-model="access.admin" />
-			</div>
+	<div class="screen">
+		<header class="ui menu ">
 			<route-menu v-for="(route, ndx) in routes" :route="route" :key="ndx" :index="ndx" />
-		</div>
-		<div class="work-pane code fourteen wide column">
+  		<div class="right menu">
+				<div class="ui item">
+					<s-checkbox label="Admin" v-model="access.admin" />
+				</div>
+			<div>
+		</header>
+		<section class="work-pane code ">
 			<router-view></router-view>
-		</div>
+		</section>
 	</div>
 </template>
 <style>
 .screen {
-	width: 100vw;
-	height: 100vh;
-}
-.work {
-	height: calc(100% - 80px);
-}
-.work-pane {
-	height: 100%;
-	overflow: auto;
-}
-div.CodeMirror {
-	height: 100%;
+	width: 100%;
 }
 </style>
 <script lang="ts">

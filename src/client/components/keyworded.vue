@@ -1,5 +1,6 @@
 <template>
 	<s-input
+		v-dimm-parts:kwdctl.inverted
 		ref="input"
 		:placeholder="placeholder"
 		:value="value"
@@ -12,28 +13,30 @@
 		<template slot="input" v-if="$slots.input">
 			<slot name="input" />
 		</template>
-		<s-select
-			action="command"
-			:text="false"
-			class="label"
-			slot="prepend"
-			v-if= "keywords && keywords.length"
-			@command="insert"
-			on="hover"
-		>
-			<s-option v-for="(keyword, index) in keywords" :key="index" :value="keyword">
-				{{keyword}}
-			</s-option>
-		</s-select>
+		<template slot="prepend">
+			<slot name="prepend"></slot>
+			<s-select
+				dimmed-part="kwdctl"
+				action="command"
+				:text="false"
+				class="label"
+				v-if= "keywords && keywords.length"
+				@command="insert"
+				on="hover"
+			>
+				<s-option v-for="(keyword, index) in keywords" :key="index" :value="keyword">
+					{{keyword}}
+				</s-option>
+			</s-select>
+		</template>
 	</s-input>
 </template>
 
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import {Field} from 'v-semantic'
 
-@Component({mixins: [Field.Input]})
+@Component
 export default class Keyworded extends Vue {
 	@Model('input') value: string
 	@Prop() label: string

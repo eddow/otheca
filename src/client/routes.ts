@@ -9,6 +9,7 @@ const MenuContainer = {
 export default [{
 	path: '/books',
 	menu: 'Book list',
+	name: 'books',
 	component: Books
 }, {
 	menu: 'Register',
@@ -17,10 +18,12 @@ export default [{
 	children: [{
 		menu: 'Each',
 		component: Register1,
+		name: 'reg1',
 		path: 'each'
 	}, {
 		menu: 'Group',
 		component: RegisterRex,
+		name: 'regRex',
 		path: 'rex'
 	}]
 }];

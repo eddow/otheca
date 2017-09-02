@@ -3,7 +3,7 @@ Minimal boilerplate
 * js-data
 * vue
 * fuse-box
-* element-ui
+* semantic-ui
 
 # Otheca
 The application can be used for itself but it also provides a minimal functionning boiler-plate that can quickly be transformed into any kind of application.
@@ -78,8 +78,9 @@ The bundler will generate 3 files :
 
 Here, all the files and the templates are "compiled" and bundled in `client/app.js`.
 
-#### [`element-ui`](http://element.eleme.io/#/en-US/component/installation)
+#### [`semantic-ui`](https://semantic-ui.com)
 This is a workstation web-application UI that is simply used here without implication on the global structure
+It is used through this [Vue adaptation](https://www.npmjs.com/package/v-semantic)
 ### Structure
 #### `assets`
 Static files available directly through the url.

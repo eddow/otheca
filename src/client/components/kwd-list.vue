@@ -5,7 +5,7 @@
 			v-model="item.str" :keywords="keywords"
 			@input="itemChange(item, index)"
 		>
-			<s-button @click="delItem(item._id)" slot="append" icon="minus" />
+			<s-button @click="delItem(item._id)" slot="prepend" icon="minus" dimmed-part="kwdctl" />
 		</keyworded>
 		<s-button icon="plus" @click="addItem" style="display: block;" />
 	</div>
@@ -15,10 +15,10 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import keyworded from './keyworded.vue'
-import {Field} from 'v-semantic'
+import * as alertify from 'alertify'
 var aids = 0;
 
-@Component({mixins: [Field.Input]})
+@Component
 export default class kwdList extends Vue {
 	@Prop()
 	keywords: string[]
@@ -51,7 +51,7 @@ export default class kwdList extends Vue {
 			if(!ided[ndx].str.trim())
 				splice();
 			else
-				this.$confirm(ided[ndx].str, 'Remove value ?').then(splice, ()=>0);
+				alertify.confirm(`Remove "${ided[ndx].str}" ?`, splice);
 		}
 	}
 	itemChange(item, index) {

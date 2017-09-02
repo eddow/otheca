@@ -83,7 +83,11 @@ export default class Books extends Vue {
 		this.selected = book;
 	}
 	del(edition) {
-		
+		/*var index = this.selected.files.indexOf(edition);
+		console.assert(!!~index, 'Removed edition in the files list');
+		this.selected.files.splice(index, 1);*/
+		this.selected.files = this.selected.files.filter(x=> x!== edition);
+		this.selected.save();
 	}
 }
 </script>

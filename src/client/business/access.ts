@@ -1,4 +1,4 @@
 const access = {
-	admin: false
+	admin: true
 }
 export default access;

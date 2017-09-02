@@ -13,11 +13,11 @@
   "author": "fmdm",
   "license": "MIT",
   "dependencies": {
+    "alertify.js": "^1.0.12",
     "axios": "^0.16.2",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "bson": "^1.0.4",
-    "element-ui": "^1.4.2",
     "express": "^4.15.4",
     "font-awesome": "^4.7.0",
     "js-data": "^3.0.1",
