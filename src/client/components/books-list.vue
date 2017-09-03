@@ -61,17 +61,14 @@ export default class BooksList extends Vue {
 	@Model('input')
 	selected: Book
 	languages: any = Languages
-	listener: any
 	filters: any = {
 		title: '',
 		authors: '',
 		keywords: '',
 		language: ''
 	}
-  created() {
-		this.listener = books.on('all', this.filter);
-	}
-	destroyed() { books.off(this.listener); }
+  created() { books.on('all', this.filter); }
+	destroyed() { books.off('all', this.filter); }
 	@Watch('filters', {deep: true, immediate: true})
 	filter() {
 		function test(filters, value, all) {

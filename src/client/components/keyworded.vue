@@ -1,6 +1,5 @@
 <template>
 	<s-input
-		v-dimm-parts:kwdctl.inverted
 		ref="input"
 		:placeholder="placeholder"
 		:value="value"
@@ -16,7 +15,6 @@
 		<template slot="prepend">
 			<slot name="prepend"></slot>
 			<s-select
-				dimmed-part="kwdctl"
 				action="command"
 				:text="false"
 				class="label"

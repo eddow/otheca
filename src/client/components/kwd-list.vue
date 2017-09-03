@@ -5,9 +5,9 @@
 			v-model="item.str" :keywords="keywords"
 			@input="itemChange(item, index)"
 		>
-			<s-button @click="delItem(item._id)" slot="prepend" icon="minus" dimmed-part="kwdctl" />
+			<s-button basic negative @click="delItem(item._id)" slot="prepend" icon="minus" />
 		</keyworded>
-		<s-button icon="plus" @click="addItem" style="display: block;" />
+		<s-button basic positive icon="plus" @click="addItem" style="display: block;" />
 	</div>
 </template>
 

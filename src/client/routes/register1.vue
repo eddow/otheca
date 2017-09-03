@@ -63,7 +63,7 @@
 				</s-panel>
 				<s-panel title="Create new" name="create">
 					<s-field label="Title" property="title" />
-					<s-field label="Language" property="language" type="languages" />
+					<s-field label="Language" property="language" type="languages" inline />
 					<s-field label="Authors" property="authors" type="list" />
 					<s-field label="Tags" property="tags" type="list" />
 					<s-button @click="register" icon="save">
@@ -99,6 +99,7 @@ export default class Register1 extends Vue {
 	addEdition() {
 		this.existing.files.push(...this.files);
 		this.existing.save();
+		this.existing = null;
 	}
 	register() {
 		var info = this.selected,

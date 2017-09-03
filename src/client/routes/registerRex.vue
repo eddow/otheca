@@ -65,7 +65,7 @@
 			</s-data-mold>
 			<s-field label="Title" property="title" @change="compute('title')" />
 			<s-field label="Edition" property="edition" @change="compute('edition')" />
-			<s-field label="Language" property="language">
+			<s-field label="Language" property="language" inline>
 					<s-select name="language" v-model="patterns.language">
 					<s-option
 						v-for="(txt, val) in languages" :key="val"
@@ -92,6 +92,7 @@ import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
 import unregistered from '../business/unregistered'
+import * as alertify from 'alertify'
 
 @Component
 export default class RegisterRex extends Vue {
@@ -149,18 +150,21 @@ export default class RegisterRex extends Vue {
 		this.filtered = unregistered;
 	}
 	register() {
-		for(let info of this.selection) {
-			var itm = new Book({
-					...info.creating,
-					files: info.files.map(x=> ({
-						rel: x.rel,
-						edition: info.creating.edition
-					})),
-					authors: info.creating.authors.filter(x=>!!x.trim()),
-					tags: info.creating.tags.filter(x=>!!x.trim())
-				});
-			itm.save();
-		}
+		
+		alertify.confirm(`Create ${this.selection.length} books ?`, ()=> {
+			for(let info of this.selection) {
+				var itm = new Book({
+						...info.creating,
+						files: info.files.map(x=> ({
+							rel: x.rel,
+							edition: info.creating.edition
+						})),
+						authors: info.creating.authors.filter(x=>!!x.trim()),
+						tags: info.creating.tags.filter(x=>!!x.trim())
+					});
+				itm.save();
+			}
+		});
 	}
 }
 </script>
