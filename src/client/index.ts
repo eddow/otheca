@@ -15,6 +15,7 @@ function observeDeeply(obj) {
 			observeDeeply(obj[i]);
 		Vue.util.defineReactive(obj, i, obj[i]);
 	}
+	return obj;
 }
 
 store.on('all', function(event, name, param) {
@@ -50,6 +51,8 @@ import * as VueRouter from 'vue-router'
 Vue.use(VueRouter);
 import semanticVue from 'v-semantic'
 Vue.use(semanticVue);
+import access from './business/access'
+Vue.prototype.$access = observeDeeply(access);
 
 import * as alertify from 'alertify'
 semanticVue.alertify(alertify);

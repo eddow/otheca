@@ -52,13 +52,11 @@ import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
 import 'models/book'
 import {store} from 'common/central'
-import access from '../business/access'
 
 const books = store.getCollection('Book');
 store.findAll('Book');
 @Component
 export default class BooksList extends Vue {
-	access = access
 	books: Book[] = null
 	@Model('input')
 	selected: Book

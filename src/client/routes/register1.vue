@@ -3,14 +3,12 @@
 		<s-table
 			:rows="unregistered"
 			striped
+			selectable
 			body-height="250"
 			highlight-current-row
 			v-model="selected"
-			style="width: 100%">
-			<s-column
-				property="name"
-				header="Name">
-			</s-column>
+			style="width: 100%"
+		>
 			<s-column
 				header="Files"
 				width="180"
@@ -21,6 +19,10 @@
 						<a :key="index" target="_blank" :href="'/lib/'+file.rel">{{file.extension}}</a>
 					</template>
 				</template>
+			</s-column>
+			<s-column
+				property="name"
+				header="Name">
 			</s-column>
 		</s-table>
 		<s-form :model="selected && selected.creating" label-width="120px" style="width: 100%">

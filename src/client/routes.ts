@@ -12,6 +12,7 @@ export default [{
 	name: 'books',
 	component: Books
 }, {
+	admin: true,
 	menu: 'Register',
 	component: MenuContainer,
 	path: '/register',

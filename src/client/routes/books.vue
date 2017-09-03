@@ -2,25 +2,33 @@
 	<div>
 		<books-list v-model="selected" />
 		<s-table
+			selectable
 			v-if="selected"
+			v-model="file"
 			:rows="selected.files"
 		>
 			<s-column
 				property="edition"
 				header="Edition"
 			></s-column>
+			<s-column header="Download">
+				<template scope="scope">
+					<form method="get" target="_blank" :action="`/lib/${scope.row.rel}`">
+						<s-button compact native-type="submit" icon="download" />
+					</form>
+				</template>
+			</s-column>
 			<s-column
 				property="rel"
 				header="File"
 			></s-column>
-			<s-column>
-				<template scope="scope">
-					<form method="get" target="_blank" :action="`/lib/${scope.row.rel}`">
-						<s-button native-type="submit" icon="download">Download</s-button>
-						<s-button v-if="access.admin" icon="trash" @click="del(scope.row)">Delete</s-button>
-					</form>
-				</template>
-			</s-column>
+			<template v-if="$access.admin" slot="footer">
+				<s-button
+					negative icon="+id card+big black dont"
+					@click="unref(file)"
+					:disabled="!file"
+				>Unreference</s-button>
+			</template>
 		</s-table>
 	</div>
 </template>
@@ -31,15 +39,14 @@ import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
 import 'models/book'
 import {store} from 'common/central'
-import access from '../business/access'
 
 const books = store.getCollection('Book');
 store.findAll('Book');
 @Component
 export default class Books extends Vue {
-	access = access
 	books: Book[] = null
 	selected: Book = null
+	file: any = null
 	languages: any = Languages
 	listener: any
 	filters: any = {}
@@ -82,7 +89,7 @@ export default class Books extends Vue {
 	select(book) {
 		this.selected = book;
 	}
-	del(edition) {
+	unref(edition) {
 		/*var index = this.selected.files.indexOf(edition);
 		console.assert(!!~index, 'Removed edition in the files list');
 		this.selected.files.splice(index, 1);*/

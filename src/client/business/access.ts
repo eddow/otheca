@@ -1,4 +1,7 @@
 const access = {
-	admin: true
+	admin: true,
+	can(req) {
+		return req?this.admin:true;
+	}
 }
 export default access;
