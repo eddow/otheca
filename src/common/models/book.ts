@@ -27,7 +27,7 @@ export const Languages = {
 export default class Book extends Record {
 	@Property() title: string
 	@Enum(...Object.keys(Languages)) language: string
-	@Items(String) authors: string[]
-	@Items(String) tags: string[]
+	@Property() authors: string
+	@Property() tags: string
 	@Items(Edition) files: Edition[]
 }

@@ -1,6 +1,7 @@
 import * as walk from 'walk'
 import {lib, extensions} from 'config'
 import {join} from 'path'
+import {unlinkSync} from 'fs'
 const rexExt = new RegExp('\\.('+extensions.join('|')+')$');
 var walker  = walk.walk(lib, {followLinks: false})
 export var libFiles = null;
@@ -33,4 +34,12 @@ function endHandler() {
 
 export function sendFile(res, rel) {
 	res.sendFile(join(lib, rel));
+}
+
+export function delFile(res, rel) {
+	var fn = join(lib, rel);
+	unlinkSync(fn);
+	delete libFiles[rel];
+	console.log('Deleted: '+fn);
+	res.status(204).send();
 }

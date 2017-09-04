@@ -13,10 +13,10 @@
 			<search-header slot="header" label="Title" v-model="filters.title" />
 		</s-column>
 		<s-column
-			property="keywords"
+			property="tags"
 			width="180"
 		>
-			<search-header slot="header" label="Keywords" v-model="filters.keywords" />
+			<search-header slot="header" label="Tags" v-model="filters.tags" />
 		</s-column>
 		<s-column
 			width="180"
@@ -39,7 +39,6 @@
 		<s-column
 			property="authors"
 			width="180"
-			:render="x=> x.join(', ')"
 		>
 			<search-header slot="header" label="Authors" v-model="filters.authors" />
 		</s-column>
@@ -64,12 +63,13 @@ export default class BooksList extends Vue {
 	filters: any = {
 		title: '',
 		authors: '',
-		keywords: '',
+		tags: '',
 		language: ''
 	}
   created() { books.on('all', this.filter); }
 	destroyed() { books.off('all', this.filter); }
 	@Watch('filters', {deep: true, immediate: true})
+	@Watch('$access', {deep: true})
 	filter() {
 		function test(filters, value, all) {
 			if(!filters || !filters.length) return true;
@@ -90,8 +90,8 @@ export default class BooksList extends Vue {
 		for(let i in this.filters)
 			filters[i] = this.filters[i].comparable().split(' ').filter(x=> !!x.trim());
 		for(let book of unfiltered) {
-			var kept = true;
-			for(let f in filters) {
+			var kept = this.$access.admin || book.files.length;
+			if(kept) for(let f in filters) {
 				let filter = filters[f], excluded = false;
 				//if filter is given "don bro", `filter` is here ['don', 'bro'] and we keep all that contains 'don' and 'bro'
 				if(!test(filter, book[f], f!== 'language')) {

@@ -4,6 +4,15 @@ import {store} from 'common/central'
 const unregisteredList = [];
 export default unregisteredList;
 
+function analyseName(name) {
+	let analysis = /([^\\\/]*)\.([^\.]{2,4})/.exec(name);
+	return {
+		name: analysis[1],
+		key: analysis[1].comparable(),
+		ext: analysis[2]
+	}
+}
+
 const books = store.getCollection('Book');
 var lib = null;
 Promise.all([
@@ -11,9 +20,9 @@ Promise.all([
 		var raw = response.data;
 		lib = {};
 		for(let rel in raw) {
-			let analysis = /^(.*)\.([^\.]{2,4})/.exec(raw[rel].name),
-				name = analysis[1], key = name.comparable();
-			(lib[key] || (lib[key] = {files: [], name, rel})).files.push({rel, extension: analysis[2], ...raw[rel]});
+			let analysis = analyseName(raw[rel].name);
+			(lib[analysis.key] || (lib[analysis.key] = {files: [], name: analysis.name, rel}))
+				.files.push({rel, extension: analysis.ext, ...raw[rel]});
 		}
 	}),
 	store.findAll('Book')
@@ -27,8 +36,8 @@ function compute() {
 				title: '',
 				edition: '',
 				language: 'en',
-				authors: [],
-				tags: []
+				authors: '',
+				tags: ''
 			},
 			...x
 		}));
@@ -43,4 +52,18 @@ function compute() {
 	}
 	unregisteredList.length = 0;
 	unregisteredList.push(...unregistered);
+}
+
+export function delFile(rel) {
+	axios.delete('/lib/'+rel).then(response=> {
+		if(204=== response.status) {
+			let analysis = analyseName(rel),
+				files = lib[analysis.key] && lib[analysis.key].files;
+			if(files) {
+				files = lib[analysis.key].files = files.filter(x=> x.rel !== rel);
+				if(!files.length) delete lib[analysis.key];
+				compute();
+			}
+		}
+	});
 }

@@ -31,11 +31,6 @@
 					<keyworded :keywords="kws" :name="field.name" v-model="field.value" />
 				</template>
 			</s-data-mold>
-			<s-data-mold select="list">
-				<template slot="input" scope="field">
-					<kwd-list :keywords="kws" :name="field.name" v-model="field.value" />
-				</template>
-			</s-data-mold>
 			<s-data-mold select="languages">
 				<template slot="input" scope="field">
 					<s-select :name="field.name" v-model="field.value">
@@ -50,7 +45,7 @@
 			
 			<s-field label="Edition" property="edition"/>
 			
-			<s-tabs v-model="targetBook">
+			<s-tabs v-model="targetBook" v-if="selected">
 				<s-panel title="Existing" name="existing">
 					<books-list v-model="existing" />
 					<s-button
@@ -64,10 +59,20 @@
 				<s-panel title="Create new" name="create">
 					<s-field label="Title" property="title" />
 					<s-field label="Language" property="language" type="languages" inline />
-					<s-field label="Authors" property="authors" type="list" />
-					<s-field label="Tags" property="tags" type="list" />
+					<s-field label="Authors" property="authors" />
+					<s-field label="Tags" property="tags" />
 					<s-button @click="register" icon="save">
 						Register
+					</s-button>
+				</s-panel>
+				<s-panel title="Delete" name="delete">
+					<s-button
+						v-for="file in selected.files" :key="file.rel"
+						@click="delFile(file.rel)"
+						style="display: block;"
+						negative icon="trash"
+					>
+						Erase the file `.{{file.extension}}`
 					</s-button>
 				</s-panel>
 			</s-tabs>
@@ -79,7 +84,7 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
-import unregistered from '../business/unregistered'
+import unregistered, {delFile} from '../business/unregistered'
 
 @Component
 export default class Register1 extends Vue {
@@ -89,6 +94,9 @@ export default class Register1 extends Vue {
 	languages: any = Languages
 	targetBook: string = 'existing'
 	existing: Book = null
+	delFile(rel) {
+		delFile(rel);
+	}
 	get files() {
 		var info = this.selected;
 		return info.files.map(x=> ({
@@ -105,9 +113,7 @@ export default class Register1 extends Vue {
 		var info = this.selected,
 			itm = new Book({
 				...info.creating,
-				files: this.files,
-				authors: info.creating.authors.filter(x=>!!x.trim()),
-				tags: info.creating.tags.filter(x=>!!x.trim())
+				files: this.files
 			});
 		itm.save();
 	}

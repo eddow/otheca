@@ -1,4 +1,4 @@
-import {libFiles, sendFile} from './controllers/dlib'
+import {libFiles, sendFile, delFile} from './controllers/dlib'
 import {join} from 'path'
 import * as express from 'express';
 
@@ -29,6 +29,9 @@ export function controllers(app) {
 	});
 	app.get('/lib/*', (req, res)=> {
 		sendFile(res, req.params[0]);
+	});
+	app.delete('/lib/*', (req, res)=> {
+		delFile(res, req.params[0]);
 	});
 	
 	//SPA: in last resort, just send `index.html` as the path is a client-side path

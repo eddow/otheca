@@ -52,17 +52,15 @@
 					<span class="ui label" v-for="item in scope.value" :key="item">{{item}}</el-tag>
 				</template>
 			</s-column>
+			<s-input slot="footer" fluid v-model="rex.string" :error="!!rex.error">
+				<s-icon icon="search" slot="prepend" />
+				<div slot="append" class="ui label">
+					{{filtered.length}} book(s)
+				</div>
+			</s-input>
 		</s-table>
 
-		<s-input fluid v-model="rex.string" :error="!!rex.error">
-			<s-icon icon="search" slot="prepend" />
-		</s-input>
 		<s-form inline :model="patterns" label-width="120px" style="width: 480px">
-			<s-data-mold select="list">
-				<template slot="input" scope="field">
-					<kwd-list :name="field.name" v-model="field.value" />
-				</template>
-			</s-data-mold>
 			<s-field label="Title" property="title" @change="compute('title')" />
 			<s-field label="Edition" property="edition" @change="compute('edition')" />
 			<s-field label="Language" property="language" inline>
@@ -74,8 +72,8 @@
 					/>
 				</s-select>
 			</s-field>
-			<s-field label="Authors" property="authors" type="list" />
-			<s-field label="Tags" property="tags" type="list" />
+			<s-field label="Authors" property="authors" />
+			<s-field label="Tags" property="tags" />
 			<s-button icon="save" @click="register">
 				Register
 			</s-button>
@@ -108,8 +106,8 @@ export default class RegisterRex extends Vue {
 		title: '',
 		language: 'en',
 		edition: '',
-		authors: [],
-		tags: []
+		authors: '',
+		tags: ''
 	}
 	@Watch('rex.string')
 	filter(value) {
@@ -158,9 +156,7 @@ export default class RegisterRex extends Vue {
 						files: info.files.map(x=> ({
 							rel: x.rel,
 							edition: info.creating.edition
-						})),
-						authors: info.creating.authors.filter(x=>!!x.trim()),
-						tags: info.creating.tags.filter(x=>!!x.trim())
+						}))
 					});
 				itm.save();
 			}
