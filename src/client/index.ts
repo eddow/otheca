@@ -49,14 +49,8 @@ import './libs'
 import * as Vue from 'vue'
 import * as VueRouter from 'vue-router'
 Vue.use(VueRouter);
-import semanticVue from 'v-semantic'
-Vue.use(semanticVue);
 import access from './business/access'
 Vue.prototype.$access = observeDeeply(access);
-
-import * as alertify from 'alertify'
-semanticVue.alertify(alertify);
-import 'alertify.js/dist/css/alertify.css'
 
 import * as components from './components/*.vue'
 for(let c in components) {

@@ -1,5 +1,6 @@
 mongo:
   debug: false
   uri: mongodb://localhost:27017/otheca
-lib: ./books
-extensions: [pdf, docx, epub, mobi]
+path:
+  lib: ./books
+  uploads: uploads

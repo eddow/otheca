@@ -1,20 +1,10 @@
-import {libFiles, sendFile, delFile} from './controllers/dlib'
+import {libFiles, sendFile, delFile, uplFiles} from './controllers/dlib'
 import {join} from 'path'
 import * as express from 'express';
 
 export function statics(app) {
 	app.use(express.static('dist/client'));
 	app.use(express.static('assets'));
-	
-	/*app.get('/fonts/*', (req, res)=> {
-		res.sendFile(req.params[0].split('?')[0], {
-			root: join(__dirname, '../node_modules/font-awesome/fonts/')
-		}, (err)=> {
-			if(err) res.sendFile(req.params[0].split('?')[0], {
-				root: join(__dirname, '../node_modules/element-ui/lib/theme-default/fonts/')
-			});
-		});
-	});*/
 
 	app.get('/themes/*', (req, res)=> {
 		res.sendFile(req.params[0].split('?')[0], {
@@ -33,6 +23,7 @@ export function controllers(app) {
 	app.delete('/lib/*', (req, res)=> {
 		delFile(res, req.params[0]);
 	});
+	app.post('/lib', uplFiles);
 	
 	//SPA: in last resort, just send `index.html` as the path is a client-side path
 	app.use(function(req, res) {

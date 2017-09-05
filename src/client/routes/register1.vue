@@ -25,6 +25,7 @@
 				header="Name">
 			</s-column>
 		</s-table>
+
 		<s-form :model="selected && selected.creating" label-width="120px" style="width: 100%">
 			<s-data-mold>
 				<template slot="input" scope="field">
@@ -45,7 +46,7 @@
 			
 			<s-field label="Edition" property="edition"/>
 			
-			<s-tabs v-model="targetBook" v-if="selected">
+			<s-tabs v-model="targetBook">
 				<s-panel title="Existing" name="existing">
 					<books-list v-model="existing" />
 					<s-button
@@ -65,7 +66,7 @@
 						Register
 					</s-button>
 				</s-panel>
-				<s-panel title="Delete" name="delete">
+				<s-panel title="Delete" name="delete" v-if="selected">
 					<s-button
 						v-for="file in selected.files" :key="file.rel"
 						@click="delFile(file.rel)"
@@ -85,6 +86,7 @@ import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
 import unregistered, {delFile} from '../business/unregistered'
+import {extensions} from 'config'
 
 @Component
 export default class Register1 extends Vue {
@@ -94,6 +96,7 @@ export default class Register1 extends Vue {
 	languages: any = Languages
 	targetBook: string = 'existing'
 	existing: Book = null
+
 	delFile(rel) {
 		delFile(rel);
 	}
