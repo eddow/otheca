@@ -10,9 +10,16 @@
 			<template slot="clip-uploader-body" scope="props">
 				<table class="dz-list">
 					<tr v-for="file in props.files" :key="file.id">
-						<td>{{file.name}}</td>
-						<!--td><s-input :disabled="file.isUploading || file.isUploaded" style="width: 600px;" v-model="file.name" /></td-->
-						<td v-if="'success'=== file.status" class="ui success label"><s-icon icon="checkmark" /></td>
+						<td v-if="file.reaction">
+							<s-input style="width: 600px;" v-model="file.name" />
+						</td>
+						<td v-else><div style="width: 600px;">{{file.name}}</div></td>
+						
+						<td v-if="file.reaction">
+							<s-button icon="upload" positive @click="file.reaction(true)" />
+							<s-button icon="trash" negative @click="file.reaction(false)" />
+						</td>
+						<td v-else-if="'success'=== file.status" class="ui success label"><s-icon icon="checkmark" /></td>
 						<td v-else-if="'error'=== file.status" class="ui error label">{{file.errorMessage}}</td>
 						<td v-else-if="'uploading'=== file._file.status">
 							<s-progress style="width: 300px;" :value="file.bytesSent" :total="file.size" />
@@ -23,7 +30,6 @@
 				</table>
 				</div>
 			</template>
-	
 		</vue-clip>
 	</div>
 </template>
@@ -62,6 +68,13 @@ export default class Upload extends Vue {
 	options = {
 		url: '/lib',
 		paramName: 'file'
+		/*,	//Find a way to overwrite the upload-file's name : here, we edit Vue data that is a copy of the `file` object from vue-clip
+		accept(file, done) {
+			Vue.set(file, 'reaction', function(accept) {
+				file.reaction = undefined;
+				if(accept) done(); else done('canceled');
+			});
+		}*/
 	}
 	get extensions() {
 		return extensions.join(',');

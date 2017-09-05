@@ -73,7 +73,7 @@
 						style="display: block;"
 						negative icon="trash"
 					>
-						Erase the file `.{{file.extension}}`
+						Erase the file `{{file.rel}}`
 					</s-button>
 				</s-panel>
 			</s-tabs>

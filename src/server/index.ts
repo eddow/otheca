@@ -7,6 +7,7 @@ import {store, initStore} from 'common/central'
 import {mount} from 'js-data-express';
 import {Container} from 'js-data'
 import * as routes from './routes'
+import {unwatchDlib} from './controllers/dlib'
 
 initStore(new Container({
 	mapperDefaults: {
@@ -22,4 +23,10 @@ mount(app, store, '/api');
 routes.controllers(app);
 
 console.log(`Listening on port ${config.server.port}`);
-export default app.listen(config.server.port);
+var listener = app.listen(config.server.port);
+export default {
+	close() {
+		listener.close();
+		unwatchDlib();
+	}
+};

@@ -9,6 +9,7 @@ initStore(new DataStore({
 	}
 }));
 //TODO: make a generic observe based on schema
+//TODO: use Vue.set instead
 function observeDeeply(obj) {
 	for(let i in obj) {
 		if(obj[i] && 'object'=== typeof obj[i])

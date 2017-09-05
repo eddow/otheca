@@ -1,7 +1,8 @@
 import * as walk from 'walk'
 import {path, extensions} from 'config'
 import {join} from 'path'
-import {unlinkSync, ensureDir, existsSync} from 'fs-extra'
+import {statSync, unlinkSync, ensureDir, existsSync} from 'fs-extra'
+import * as watch from 'node-watch'
 import * as Upload from 'upload-file'
 const rexExt = new RegExp('\\.('+extensions.join('|')+')$');
 var walker  = walk.walk(path.lib, {followLinks: false})
@@ -28,11 +29,36 @@ function errorsHandler(root, nodeStatsArray, next) {
   });
   next();
 }
-
+export var watcher = null;
 function endHandler() {
-  libFiles = tmp;
+	libFiles = tmp;
+	watcher = watch(path.lib, {recursive: true}, function(event, filename) {
+		var stat, rel = filename.substr(path.lib.length);
+		switch(event) {
+			case 'update':
+				stat = statSync(filename);
+				if(stat.isFile()) {
+					if(~'\\/'.indexOf(rel[0])) rel = rel.substr(1);
+					console.log('Added: ', rel);
+					libFiles[rel] = {
+						name: /[^\\\/]*$/.exec(rel)[0],
+						size: stat.size
+					};
+				}
+				break;
+			case 'remove':
+				delete libFiles[rel];
+				console.log('Deleted: '+rel);
+				break;
+		}
+	});
 }
-
+export function unwatchDlib() {
+	if(watcher) {
+		watcher.close();
+		watcher = null;
+	}
+}
 export function sendFile(res, rel) {
 	res.sendFile(join(path.lib, rel));
 }
@@ -40,8 +66,6 @@ export function sendFile(res, rel) {
 export function delFile(res, rel) {
 	var fn = join(path.lib, rel);
 	unlinkSync(fn);
-	delete libFiles[rel];
-	console.log('Deleted: '+fn);
 	res.status(204).send();
 }
 
@@ -56,11 +80,12 @@ export function uplFiles(req, res) {
 			var anl = /^(.*)\.([^\.]*)$/.exec(file.filename),
 				fname = anl && anl[1], ext = anl && anl[2],
 				add = 0, addition = '',
-				path = file.path.substr(0, file.path.length-file.filename.length);
+				upath = file.path.substr(0, file.path.length-file.filename.length);
 			ext = ext?'.'+ext:'';
-			while(existsSync(path+fname+addition+ext))
+			while(existsSync(upath+fname+addition+ext))
 				addition = '-'+(++add);
-      return fname+addition+ext;
+			fname += addition+ext;
+      return fname;
     }
   });
 
