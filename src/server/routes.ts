@@ -1,8 +1,8 @@
-import {libFiles, sendFile, delFile, uplFiles} from './controllers/dlib'
+import {libFiles, sendFile, delFile, uplFiles, on as dlibOn} from './controllers/dlib'
 import {join} from 'path'
 import * as express from 'express';
 
-export function statics(app) {
+export function statics(app, sockets) {
 	app.use(express.static('dist/client'));
 	app.use(express.static('assets'));
 
@@ -13,7 +13,7 @@ export function statics(app) {
 	});
 }
 
-export function controllers(app) {	
+export function controllers(app, sockets) {	
 	app.get('/lib', (req, res)=> {
 		res.send(libFiles);
 	});
@@ -24,6 +24,10 @@ export function controllers(app) {
 		delFile(res, req.params[0]);
 	});
 	app.post('/lib', uplFiles);
+	dlibOn((event, ...args)=> {
+		console.log('event:dlib', event, ...args);
+		sockets.emit('dlib', event, ...args);
+	});
 	
 	//SPA: in last resort, just send `index.html` as the path is a client-side path
 	app.use(function(req, res) {

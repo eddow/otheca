@@ -43,13 +43,15 @@ Sparky.task("build", ()=> {
 		});
 
 	const app = fuse.bundle("client/app").target('browser')
-    .watch("(client|common)/**")
+		.watch("(client|common)/**")
+		.alias('biz', '~/client/business')
 		//.sourceMaps(true)
 		//.plugin(HotReloadPlugin({port: 4445}))
     .instructions('!> [client/index.ts] +[client/routes/*.vue] +[client/components/*.vue] +[common/**/*.*] - *.d.ts');
 	//if (!production) app.hmr();
 
 	const vendor = fuse.bundle("client/vendor").target('browser')
+		.alias('biz', '~/client/business')
 		//.instructions(`~ client/*.ts +tslib`);
 		.shim({
 			jquery: {

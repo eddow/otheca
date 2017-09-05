@@ -4,10 +4,10 @@ import * as express from 'express';
 import {MongoDBAdapter} from 'js-data-mongodb';
 import * as config from 'config'
 import {store, initStore} from 'common/central'
-import {mount} from 'js-data-express';
 import {Container} from 'js-data'
 import * as routes from './routes'
 import {unwatchDlib} from './controllers/dlib'
+import * as io from 'socket.io'
 
 initStore(new Container({
 	mapperDefaults: {
@@ -18,12 +18,14 @@ initStore(new Container({
 store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': true });
 
 const app = express();
-routes.statics(app);
-mount(app, store, '/api');
-routes.controllers(app);
-
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+routes.statics(app, io.sockets);
+import jsData from './controllers/js-data'
+jsData(app, io.sockets, store);
+routes.controllers(app, io.sockets);
 console.log(`Listening on port ${config.server.port}`);
-var listener = app.listen(config.server.port);
+var listener = server.listen(config.server.port);
 export default {
 	close() {
 		listener.close();

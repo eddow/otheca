@@ -89,7 +89,7 @@ tr.unselected td {
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
-import unregistered from '../business/unregistered'
+import unregistered from 'biz/unregistered'
 import * as alertify from 'alertify'
 
 @Component

@@ -16,5 +16,5 @@ Vue.use(vueClip);
 
 // https://github.com/fuse-box/fuse-box/issues/542
 //import 'vue-property-decorator' //This is not needed, I don't know why
-import './business/unregistered'
+import 'biz/unregistered'
 import './components/route-menu/item.vue'

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<s-table
-			:rows="unregistered"
+			:rows="filtered"
 			striped
 			selectable
 			body-height="250"
@@ -20,9 +20,8 @@
 					</template>
 				</template>
 			</s-column>
-			<s-column
-				property="name"
-				header="Name">
+			<s-column property="name">
+				<search-header slot="header" label="Name" v-model="filterName" />
 			</s-column>
 		</s-table>
 
@@ -85,18 +84,36 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
-import unregistered, {delFile} from '../business/unregistered'
+import unregistered, {delFile} from 'biz/unregistered'
 import {extensions} from 'config'
 
 @Component
 export default class Register1 extends Vue {
 	unregistered: any[] = unregistered
+	filtered: any[] = null
 	selected: any = null
 	kws: string[]
 	languages: any = Languages
 	targetBook: string = 'existing'
 	existing: Book = null
-
+	filterName: string = ''
+	
+	@Watch('unregistered', {deep: true}) listChanged() { this.filter(); }
+	@Watch('filterName', {immediate: true}) filterChanged() { this.filter(); }
+	filter() {
+		function test(filters, value) {
+			if(!filters || !filters.length) return true;
+			if(!value) return false;
+			console.assert('string'=== typeof value);
+			value = value.comparable();
+			for(let filter of filters)
+				if(!~value.indexOf(filter))	//if we don't find one item of the filter in the value
+					return false;
+			return true;
+		}
+		var filters = this.filterName.comparable().split(' ').filter(x=> !!x.trim());
+		this.filtered = this.unregistered.filter(x=> test(filters, x.name));
+	}
 	delFile(rel) {
 		delFile(rel);
 	}

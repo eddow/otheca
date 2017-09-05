@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {store} from 'common/central'
+import {socket} from './js-data'
 
 const unregisteredList = [];
 export default unregisteredList;
@@ -57,13 +58,26 @@ function compute() {
 export function delFile(rel) {
 	axios.delete('/lib/'+rel).then(response=> {
 		if(204=== response.status) {
-			let analysis = analyseName(rel),
-				files = lib[analysis.key] && lib[analysis.key].files;
+			//done in socket.io
+		}
+	});
+}
+
+socket.on('dlib', function(event, rel, raw?) {
+	let analysis = analyseName(rel);
+	switch(event) {
+		case 'add':
+			(lib[analysis.key] || (lib[analysis.key] = {files: [], name: analysis.name, rel}))
+				.files.push({rel, extension: analysis.ext, ...raw[rel]});
+			compute();
+			break;
+		case 'del':
+			let files = lib[analysis.key] && lib[analysis.key].files;
 			if(files) {
 				files = lib[analysis.key].files = files.filter(x=> x.rel !== rel);
 				if(!files.length) delete lib[analysis.key];
 				compute();
 			}
-		}
-	});
-}
+			break;
+	}
+})

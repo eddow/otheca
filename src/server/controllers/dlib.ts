@@ -29,25 +29,32 @@ function errorsHandler(root, nodeStatsArray, next) {
   });
   next();
 }
+// remove the head \ or / if any
+function slashless(rel: string) {
+	if(~'\\/'.indexOf(rel[0])) rel = rel.substr(1);
+	return rel;
+}
 export var watcher = null;
 function endHandler() {
 	libFiles = tmp;
 	watcher = watch(path.lib, {recursive: true}, function(event, filename) {
-		var stat, rel = filename.substr(path.lib.length);
+		var stat, rel = slashless(filename.substr(path.lib.length));
 		switch(event) {
 			case 'update':
 				stat = statSync(filename);
 				if(stat.isFile()) {
-					if(~'\\/'.indexOf(rel[0])) rel = rel.substr(1);
 					console.log('Added: ', rel);
-					libFiles[rel] = {
+					var added = {
 						name: /[^\\\/]*$/.exec(rel)[0],
 						size: stat.size
 					};
+					if(socketCb) socketCb('add', rel, added);
+					libFiles[rel] = added;
 				}
 				break;
 			case 'remove':
 				delete libFiles[rel];
+				if(socketCb) socketCb('del', rel);
 				console.log('Deleted: '+rel);
 				break;
 		}
@@ -67,6 +74,10 @@ export function delFile(res, rel) {
 	var fn = join(path.lib, rel);
 	unlinkSync(fn);
 	res.status(204).send();
+}
+var socketCb = null;
+export function on(cb) {
+	socketCb = cb;
 }
 
 export function uplFiles(req, res) {

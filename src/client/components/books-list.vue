@@ -51,9 +51,9 @@ import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Book, {Languages} from 'models/book'
 import 'models/book'
 import {store} from 'common/central'
+import {bindCollection} from 'biz/js-data'
 
-const books = store.getCollection('Book');
-store.findAll('Book');
+const books = bindCollection('Book');
 @Component
 export default class BooksList extends Vue {
 	books: Book[] = null

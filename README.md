@@ -4,6 +4,7 @@ Minimal boilerplate
 * vue
 * fuse-box
 * semantic-ui
+* socket.io
 
 # Otheca
 The application can be used for itself but it also provides a minimal functionning boiler-plate that can quickly be transformed into any kind of application.

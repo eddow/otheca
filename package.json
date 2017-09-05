@@ -27,6 +27,7 @@
     "mongodb": "^2.2.31",
     "node-fs-extra": "^0.8.2",
     "node-watch": "^0.5.5",
+    "socket.io": "^2.0.3",
     "string": "^3.3.3",
     "ts-json-schema-decorator": "^1.2.2",
     "upload-file": "^1.2.0",
