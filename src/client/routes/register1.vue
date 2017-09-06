@@ -20,30 +20,14 @@
 					</template>
 				</template>
 			</s-column>
-			<s-column property="name">
+			<s-column prop="name">
 				<search-header slot="header" label="Name" v-model="filterName" />
 			</s-column>
 		</s-table>
 
 		<s-form :model="selected && selected.creating" label-width="120px" style="width: 100%">
-			<s-data-mold>
-				<template slot="input" scope="field">
-					<keyworded :keywords="kws" :name="field.name" v-model="field.value" />
-				</template>
-			</s-data-mold>
-			<s-data-mold select="languages">
-				<template slot="input" scope="field">
-					<s-select :name="field.name" v-model="field.value">
-						<s-option
-							v-for="(txt, val) in languages" :key="val"
-							:value="val"
-							:text="txt"
-						>
-					</s-select>
-				</template>
-			</s-data-mold>
-			
-			<s-field label="Edition" property="edition"/>
+			<book-mold :kws="kws" />
+			<s-field label="Edition" prop="edition"/>
 			
 			<s-tabs v-model="targetBook">
 				<s-panel title="Existing" name="existing">
@@ -57,10 +41,10 @@
 					</s-button>
 				</s-panel>
 				<s-panel title="Create new" name="create">
-					<s-field label="Title" property="title" />
-					<s-field label="Language" property="language" type="languages" inline />
-					<s-field label="Authors" property="authors" />
-					<s-field label="Tags" property="tags" />
+					<s-field label="Title" prop="title" />
+					<s-field label="Language" prop="language" type="languages" inline />
+					<s-field label="Authors" prop="authors" />
+					<s-field label="Tags" prop="tags" />
 					<s-button @click="register" icon="save">
 						Register
 					</s-button>
@@ -83,7 +67,7 @@
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import Book, {Languages} from 'models/book'
+import Book from 'models/book'
 import unregistered, {delFile} from 'biz/unregistered'
 import {extensions} from 'config'
 
@@ -93,7 +77,6 @@ export default class Register1 extends Vue {
 	filtered: any[] = null
 	selected: any = null
 	kws: string[]
-	languages: any = Languages
 	targetBook: string = 'existing'
 	existing: Book = null
 	filterName: string = ''

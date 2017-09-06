@@ -2,21 +2,11 @@
 	<div>
 		<books-list v-model="selected" />
 		<s-form v-if="$access.admin" :model="selected">
-			<s-data-mold select="languages">
-				<template slot="input" scope="field">
-					<s-select :name="field.name" v-model="field.value">
-						<s-option
-							v-for="(txt, val) in languages" :key="val"
-							:value="val"
-							:text="txt"
-						>
-					</s-select>
-				</template>
-			</s-data-mold>
-			<s-field label="Title" property="title" />
-			<s-field label="Language" property="language" type="languages" inline />
-			<s-field label="Authors" property="authors" />
-			<s-field label="Tags" property="tags" />
+			<book-mold />
+			<s-field label="Title" prop="title" />
+			<s-field label="Language" prop="language" type="languages" inline />
+			<s-field label="Authors" prop="authors" />
+			<s-field label="Tags" prop="tags" />
 			<s-button v-if="selected" icon="save" positive :disabled="!selected.hasChanges()" @click="selected.save()" />
 			<s-button
 				negative icon="+database+large teal dont"
@@ -30,7 +20,7 @@
 			:rows="selected.files"
 		>
 			<s-column
-				property="edition"
+				prop="edition"
 				header="Edition"
 			></s-column>
 			<s-column header="Download">
@@ -41,12 +31,12 @@
 				</template>
 			</s-column>
 			<s-column
-				property="rel"
+				prop="rel"
 				header="File"
 			></s-column>
 			<template v-if="$access.admin" slot="footer">
 				<s-form :model="file">
-					<s-field inline property="edition" label="Edition" />
+					<s-field inline prop="edition" label="Edition" />
 				</s-form>
 				<s-button
 					negative icon="+database+large teal dont"
@@ -61,14 +51,13 @@
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import Book, {Languages} from 'models/book'
+import Book from 'models/book'
 import 'models/book'
 
 @Component
 export default class Books extends Vue {
 	selected: Book = null
 	file: any = null
-	languages: any = Languages
 	select(book) {
 		this.selected = book;
 	}

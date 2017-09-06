@@ -9,11 +9,11 @@
 		@row-click="select"
 		style="width: 100%"
 	>
-		<s-column property="title">
+		<s-column prop="title">
 			<search-header slot="header" label="Title" v-model="filters.title" />
 		</s-column>
 		<s-column
-			property="tags"
+			prop="tags"
 			width="180"
 		>
 			<search-header slot="header" label="Tags" v-model="filters.tags" />
@@ -37,7 +37,7 @@
 			</template>
 		</s-column>
 		<s-column
-			property="authors"
+			prop="authors"
 			width="180"
 		>
 			<search-header slot="header" label="Authors" v-model="filters.authors" />

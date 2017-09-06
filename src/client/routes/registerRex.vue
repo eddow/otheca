@@ -17,25 +17,22 @@
 						@click="scope.toggle(scope.row)" />
 				</template>
 			</s-checkbox-column>
-			<s-column
-				property="rel"
-				header="Path"
-			/>
-			<s-column header="Matches" property="matches">
+			<s-column prop="rel" header="Path" />
+			<s-column header="Matches" prop="matches">
 				<template scope="scope">
 					<span class="ui label" v-for="item in scope.value" :key="item">{{item}}</el-tag>
 				</template>
 			</s-column>
 			<s-column
-				property="creating.title"
+				prop="creating.title"
 				header="Title"
 			></s-column>
 			<s-column
-				property="creating.edition"
+				prop="creating.edition"
 				header="Edition"
 			></s-column>
 			<s-column
-				property="creating.authors"
+				prop="creating.authors"
 				header="Authors"
 				width="180"
 			>
@@ -44,7 +41,7 @@
 				</template>
 			</s-column>
 			<s-column
-				property="creating.tags"
+				prop="creating.tags"
 				header="Tags"
 				width="180"
 			>
@@ -60,20 +57,13 @@
 			</s-input>
 		</s-table>
 
-		<s-form inline :model="patterns" label-width="120px" style="width: 480px">
-			<s-field label="Title" property="title" @change="compute('title')" />
-			<s-field label="Edition" property="edition" @change="compute('edition')" />
-			<s-field label="Language" property="language" inline>
-					<s-select name="language" v-model="patterns.language">
-					<s-option
-						v-for="(txt, val) in languages" :key="val"
-						:value="val"
-						:text="txt"
-					/>
-				</s-select>
-			</s-field>
-			<s-field label="Authors" property="authors" />
-			<s-field label="Tags" property="tags" />
+		<s-form :model="patterns" label-width="120px">
+			<book-mold />
+			<s-field label="Title" prop="title" @change="compute('title')" />
+			<s-field label="Edition" prop="edition" @change="compute('edition')" />
+			<s-field label="Language" prop="language" type="languages" inline />
+			<s-field label="Authors" prop="authors" />
+			<s-field label="Tags" prop="tags" />
 			<s-button icon="save" @click="register">
 				Register
 			</s-button>
@@ -88,7 +78,7 @@ tr.unselected td {
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import Book, {Languages} from 'models/book'
+import Book from 'models/book'
 import unregistered from 'biz/unregistered'
 import * as alertify from 'alertify'
 
@@ -96,7 +86,6 @@ import * as alertify from 'alertify'
 export default class RegisterRex extends Vue {
 	filtered: any[] = []
 	exclusion: any[] = []
-	languages: any = Languages
 	rex: any = {
 		string: '',
 		error: ''
