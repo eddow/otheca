@@ -1,10 +1,5 @@
 <template>
 	<div style="display: none;">
-		<s-data-mold>
-			<template slot="input" scope="field">
-				<keyworded :keywords="kws" :name="field.name" v-model="field.value" />
-			</template>
-		</s-data-mold>
 		<s-data-mold select="languages">
 			<template slot="input" scope="field">
 				<s-select :name="field.name" v-model="field.value">
@@ -17,6 +12,11 @@
 			</template>
 			<template slot="display" scope="field">
 				{{languages[field.value]}}
+			</template>
+		</s-data-mold>
+		<s-data-mold>
+			<template slot="input" scope="field">
+				<keyworded :keywords="kws" :name="field.name" v-model="field.value" />
 			</template>
 		</s-data-mold>
 	</div>

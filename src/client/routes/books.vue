@@ -1,18 +1,6 @@
 <template>
 	<div>
-		<books-list v-model="selected" />
-		<s-form v-if="$access.admin" :model="selected">
-			<book-mold />
-			<s-field label="Title" prop="title" />
-			<s-field label="Language" prop="language" type="languages" inline />
-			<s-field label="Authors" prop="authors" />
-			<s-field label="Tags" prop="tags" />
-			<s-button v-if="selected" icon="save" positive :disabled="!selected.hasChanges()" @click="selected.save()" />
-			<s-button
-				negative icon="+database+large teal dont"
-				@click="bdel()"
-			>Delete book</s-button>
-		</s-form>
+		<books-list v-model="selected" @isEditing="x=> isEditing = x" />
 		<s-table
 			selectable
 			v-if="selected"
@@ -22,22 +10,17 @@
 			<s-column
 				prop="edition"
 				header="Edition"
-			></s-column>
+				:edit="isEditing"
+			/>
 			<s-column header="Download">
 				<template scope="scope">
-					<form method="get" target="_blank" :action="`/lib/${scope.row.rel}`">
+					<form method="get" target="_blank" :action="`/lib/${scope.model.rel}`">
 						<s-button compact native-type="submit" icon="download" />
 					</form>
 				</template>
 			</s-column>
-			<s-column
-				prop="rel"
-				header="File"
-			></s-column>
-			<template v-if="$access.admin" slot="footer">
-				<s-form :model="file">
-					<s-field inline prop="edition" label="Edition" />
-				</s-form>
+			<s-column prop="rel" header="File" />
+			<template v-if="isEditing" slot="footer">
 				<s-button
 					negative icon="+database+large teal dont"
 					@click="unref(file)"
@@ -57,12 +40,10 @@ import 'models/book'
 @Component
 export default class Books extends Vue {
 	selected: Book = null
+	isEditing: boolean = false
 	file: any = null
 	select(book) {
 		this.selected = book;
-	}
-	bdel() {
-		this.selected.destroy();
 	}
 	unref(edition) {
 		/*var index = this.selected.files.indexOf(edition);

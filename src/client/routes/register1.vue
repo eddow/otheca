@@ -14,7 +14,7 @@
 				width="180"
 			>
 				<template scope="scope">
-					<template v-for="(file, index) in scope.row.files">
+					<template v-for="(file, index) in scope.model.files">
 						<template v-if="0<index">, </template>
 						<a :key="index" target="_blank" :href="'/lib/'+file.rel">{{file.extension}}</a>
 					</template>

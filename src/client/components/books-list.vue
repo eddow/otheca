@@ -9,17 +9,22 @@
 		@row-click="select"
 		style="width: 100%"
 	>
-		<s-column prop="title">
+		<book-mold />
+		<s-column prop="title" :edit="$access.admin">
 			<search-header slot="header" label="Title" v-model="filters.title" />
 		</s-column>
 		<s-column
 			prop="tags"
 			width="180"
+			:edit="$access.admin"
 		>
 			<search-header slot="header" label="Tags" v-model="filters.tags" />
 		</s-column>
 		<s-column
 			width="180"
+			:edit="$access.admin"
+			:prop="language"
+			type="languages"
 		>
 			<label slot="header">
 				Language
@@ -29,19 +34,29 @@
 						:value="val"
 						:text="txt"
 					>
-					<!--s-icon slot="prepend" icon="search" /-->
+					<s-icon slot="prepend" icon="search" />
 				</s-select>
 			</label>
-			<template scope="scope">
-				{{languages[scope.row.language]}}
-			</template>
+			<!--template scope="scope">
+				{{languages[scope.model.language]}}
+			</template-->
 		</s-column>
 		<s-column
 			prop="authors"
 			width="180"
+			:edit="$access.admin"
 		>
 			<search-header slot="header" label="Authors" v-model="filters.authors" />
 		</s-column>
+		<s-row-edit-column v-if="$access.admin"
+			@save="book=> book.save()"
+			@cancel="book=> book.revert()"
+			@remove="delBook"
+			:hasChanges="book => book.hasChanges()"
+			save-icon="save"
+			remove-icon="+database+large teal dont"
+			:editingRows="editing"
+		/>
 	</s-table>
 </template>
 
@@ -52,11 +67,13 @@ import Book, {Languages} from 'models/book'
 import 'models/book'
 import {store} from 'common/central'
 import {bindCollection} from 'biz/js-data'
+import * as alertify from 'alertify'
 
 const books = bindCollection('Book');
 @Component
 export default class BooksList extends Vue {
 	books: Book[] = null
+	editing = []
 	@Model('input')
 	selected: Book
 	languages: any = Languages
@@ -102,8 +119,18 @@ export default class BooksList extends Vue {
 			if(kept) this.books.push(book);
 		}
 	}
+	@Watch('editing', {deep: true, immediate: true}) changeEditing() {
+		this.$emit('isEditing', !!~this.editing.indexOf(this.selected));
+	}
 	select(book) {
 		this.$emit('input', book);
+		this.$nextTick(this.changeEditing)
+	}
+	delBook(book, doer, cancel) {
+		alertify.confirm(`Unreference "${book.title}" ?`, ()=> {
+			book.destroy();
+		});
+		cancel();
 	}
 }
 </script>

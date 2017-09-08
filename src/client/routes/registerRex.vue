@@ -14,7 +14,7 @@
 					<s-icon
 						:icon="scope.checked?'checkmark':'remove'"
 						:class="scope.checked?'grey':'red'"
-						@click="scope.toggle(scope.row)" />
+						@click="scope.toggle(scope.model)" />
 				</template>
 			</s-checkbox-column>
 			<s-column prop="rel" header="Path" />
@@ -137,7 +137,6 @@ export default class RegisterRex extends Vue {
 		this.filtered = unregistered;
 	}
 	register() {
-		
 		alertify.confirm(`Create ${this.selection.length} books ?`, ()=> {
 			for(let info of this.selection) {
 				var itm = new Book({
