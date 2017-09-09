@@ -1,5 +1,5 @@
 const access = {
-	admin: true,
+	admin: false,
 	can(req) {
 		return req?this.admin:true;
 	}

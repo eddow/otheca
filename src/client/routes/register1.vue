@@ -82,7 +82,7 @@ export default class Register1 extends Vue {
 	existing: Book = null
 	filterName: string = ''
 	
-	@Watch('unregistered', {deep: true}) listChanged() { this.filter(); }
+	@Watch('unregistered') listChanged() { this.filter(); }
 	@Watch('filterName', {immediate: true}) filterChanged() { this.filter(); }
 	filter() {
 		function test(filters, value) {
