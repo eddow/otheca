@@ -23,7 +23,7 @@
 		<s-column
 			width="180"
 			:edit="$access.admin"
-			:prop="language"
+			prop="language"
 			type="languages"
 		>
 			<label slot="header">
@@ -37,9 +37,6 @@
 					<s-icon slot="prepend" icon="search" />
 				</s-select>
 			</label>
-			<!--template scope="scope">
-				{{languages[scope.model.language]}}
-			</template-->
 		</s-column>
 		<s-column
 			prop="authors"
@@ -55,7 +52,7 @@
 			:hasChanges="book => book.hasChanges()"
 			save-icon="save"
 			remove-icon="+database+large teal dont"
-			:editingRows="editing"
+			prop="editing"
 		/>
 	</s-table>
 </template>
@@ -73,7 +70,7 @@ const books = bindCollection('Book');
 @Component
 export default class BooksList extends Vue {
 	books: Book[] = null
-	editing = []
+	
 	@Model('input')
 	selected: Book
 	languages: any = Languages
@@ -119,12 +116,8 @@ export default class BooksList extends Vue {
 			if(kept) this.books.push(book);
 		}
 	}
-	@Watch('editing', {deep: true, immediate: true}) changeEditing() {
-		this.$emit('isEditing', !!~this.editing.indexOf(this.selected));
-	}
 	select(book) {
 		this.$emit('input', book);
-		this.$nextTick(this.changeEditing)
 	}
 	delBook(book, doer, cancel) {
 		alertify.confirm(`Unreference "${book.title}" ?`, ()=> {
