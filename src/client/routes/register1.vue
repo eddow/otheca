@@ -8,6 +8,7 @@
 			highlight-current-row
 			v-model="selected"
 			style="width: 100%"
+			idProperty="name"
 		>
 			<s-column
 				header="Files"

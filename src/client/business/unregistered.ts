@@ -14,7 +14,8 @@ function analyseName(name) {
 	}
 }
 
-const books = store.getCollection('Book');
+import {bindCollection} from 'biz/js-data'
+const books = bindCollection('Book');
 var lib = null;
 Promise.all([
 	axios('/lib').then(response=> {
