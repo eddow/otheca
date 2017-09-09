@@ -61,7 +61,7 @@
 			<book-mold />
 			<s-field label="Title" prop="title" />
 			<s-field label="Edition" prop="edition" />
-			<s-field label="Language" prop="language" />
+			<s-field label="Language" prop="language" type="languages" inline />
 			<s-field label="Authors" prop="authors" />
 			<s-field label="Tags" prop="tags" />
 			<s-button icon="save" @click="register">
