@@ -31,7 +31,7 @@
     "string": "^3.3.3",
     "ts-json-schema-decorator": "^1.2.2",
     "upload-file": "^1.2.0",
-    "v-semantic": "file:.yalc/v-semantic",
+    "v-semantic": "^0.1.0",
     "vue-clip": "^1.0.0",
     "vue-property-decorator": "file:.yalc/vue-property-decorator",
     "vue-router": "^2.7.0",

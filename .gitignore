@@ -2,7 +2,6 @@ node_modules
 dist
 config/local.*
 .fusebox
-.yalc
 .vscode
 package-lock.*
 *.lock
