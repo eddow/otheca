@@ -59,9 +59,9 @@
 
 		<s-form :model="patterns" label-width="120px">
 			<book-mold />
-			<s-field label="Title" prop="title" @change="compute('title')" />
-			<s-field label="Edition" prop="edition" @change="compute('edition')" />
-			<s-field label="Language" prop="language" type="languages" inline />
+			<s-field label="Title" prop="title" />
+			<s-field label="Edition" prop="edition" />
+			<s-field label="Language" prop="language" />
 			<s-field label="Authors" prop="authors" />
 			<s-field label="Tags" prop="tags" />
 			<s-button icon="save" @click="register">
@@ -118,7 +118,8 @@ export default class RegisterRex extends Vue {
 		});
 		this.compute();
 	}
-	compute(itm?) {
+	@Watch('patterns', {deep: true})
+	compute(/*itm?*/) {
 		for(let x of this.filtered) {
 			function replaceMatches(str) {
 				if(str instanceof Array) return str.map(replaceMatches);
@@ -126,14 +127,14 @@ export default class RegisterRex extends Vue {
 					str = str.replace('$'+(i+1), x.matches[i]||'');
 				return str;
 			}
-			if(itm)
+			/*if(itm)
 				x.creating[itm] = replaceMatches(this.patterns[itm]);
-			else for(let itm in this.patterns) 
+			else*/ for(let itm in this.patterns) 
 				x.creating[itm] = replaceMatches(this.patterns[itm]);
 		}
 	}
 	created() {
-		this.$watch(()=> unregistered, ()=> this.filter(null, this.rex.string, ()=> void 0));
+		this.$watch(()=> unregistered, ()=> this.filter(this.rex.string));
 		this.filtered = unregistered;
 	}
 	register() {
