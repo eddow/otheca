@@ -19,7 +19,7 @@ const books = bindCollection('Book');
 var lib = null;
 Promise.all([
 	axios('/lib').then(response=> {
-		var raw = response.data;
+		var raw = response.data || {};
 		lib = {};
 		for(let rel in raw) {
 			let analysis = analyseName(raw[rel].name);
@@ -28,8 +28,10 @@ Promise.all([
 		}
 	}),
 	store.findAll('Book')
-]).then(compute);
-books.on('all', compute);
+]).then(()=> {
+	compute();
+	books.on('all', compute);
+});
 
 function compute() {
 	var files = {},
