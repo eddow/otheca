@@ -20,10 +20,17 @@
 				</template>
 			</s-column>
 			<s-column
+				header="Extension"
+			>
+				<template scope="scope">
+					{{extension(scope.model.rel)}}
+				</template>
+			</s-column>
+			<s-column
 				prop="edition"
 				header="Edition"
 				:edit="selected.editing"
-			>
+			/>
 		</s-table>
 	</div>
 </template>
@@ -51,6 +58,9 @@ export default class Books extends Vue {
 			this.selected.files = this.selected.files.filter(x=> x!== edition);
 			this.selected.save();//.then(filter)
 		});
+	}
+	extension(path: string) {
+		return path.substr(path.lastIndexOf('.')+1);
 	}
 }
 </script>
