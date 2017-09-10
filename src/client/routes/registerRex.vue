@@ -5,6 +5,7 @@
 			striped
 			class="rex"
 			body-height="250"
+			row-height="42"
 			highlight-current-row
 			style="width: 100%"
 			:row-class="row=> !row.selected && 'unselected'"

@@ -7,7 +7,7 @@ export default unregisteredList;
 
 function analyseName(name) {
 	let analysis = /([^\\\/]*)\.([^\.]{2,4})/.exec(name);
-	return {
+	return analysis && {
 		name: analysis[1],
 		key: analysis[1].comparable(),
 		ext: analysis[2]
@@ -23,8 +23,9 @@ Promise.all([
 		lib = {};
 		for(let rel in raw) {
 			let analysis = analyseName(raw[rel].name);
-			(lib[analysis.key] || (lib[analysis.key] = {files: [], name: analysis.name, rel}))
-				.files.push({rel, extension: analysis.ext, ...raw[rel]});
+			if(analysis)
+				(lib[analysis.key] || (lib[analysis.key] = {files: [], name: analysis.name, rel}))
+					.files.push({rel, extension: analysis.ext, ...raw[rel]});
 		}
 	}),
 	store.findAll('Book')
@@ -68,7 +69,7 @@ export function delFile(rel) {
 
 socket.on('dlib', function(event, rel, raw?) {
 	let analysis = analyseName(rel);
-	switch(event) {
+	if(analysis) switch(event) {
 		case 'add':
 			(lib[analysis.key] || (lib[analysis.key] = {files: [], name: analysis.name, rel}))
 				.files.push({rel, extension: analysis.ext, ...raw[rel]});

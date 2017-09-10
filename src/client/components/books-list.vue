@@ -4,6 +4,7 @@
 		:rows="books"
 		striped
 		body-height="200"
+		row-height="42"
 		selectable
 		:current="selected"
 		@row-click="select"

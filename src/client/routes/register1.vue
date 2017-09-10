@@ -5,6 +5,7 @@
 			striped
 			selectable
 			body-height="250"
+			row-height="42"
 			highlight-current-row
 			v-model="selected"
 			style="width: 100%"

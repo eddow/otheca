@@ -29,7 +29,7 @@ export function observeDeeply(obj, schema?) {
 }
 
 store.on('all', function(event, name, param) {
-	console.log.apply(console, arguments);
+	console.log('js-data', event);
 	//Records are here observed by Vue. Without this, their properties are never observed
 	if('add'=== event && param && param.length)
 		observeDeeply(param, {
